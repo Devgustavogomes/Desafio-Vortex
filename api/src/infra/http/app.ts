@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import { env } from "@/infra/config/env";
 import { errorMiddleware } from "@/infra/http/middlewares/errorMiddleware";
+import { authRouter } from "@/modules/auth/auth.module";
 
 export function createApp() {
   const app = express();
@@ -20,6 +21,8 @@ export function createApp() {
   app.get("/health", (_req, res) => {
     res.json({ status: "ok" });
   });
+
+  app.use(authRouter);
 
   app.use(errorMiddleware);
 
