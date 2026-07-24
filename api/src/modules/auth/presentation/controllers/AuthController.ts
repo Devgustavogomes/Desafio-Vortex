@@ -10,18 +10,18 @@ export class AuthController {
     private refreshTokenUseCase: RefreshTokenUseCase,
   ) {}
 
-  async register(req: Request, res: Response, next: NextFunction): Promise<void> {
+  register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const result = await this.registerUseCase.execute(req.body);
     res.status(201).json(result);
-  }
+  };
 
-  async login(req: Request, res: Response, next: NextFunction): Promise<void> {
+  login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const result = await this.loginUseCase.execute(req.body);
     res.status(200).json(result);
-  }
+  };
 
-  async refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
+  refresh = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const result = await this.refreshTokenUseCase.execute(req.body);
     res.status(200).json(result);
-  }
+  };
 }

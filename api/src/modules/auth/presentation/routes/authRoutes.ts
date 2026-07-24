@@ -10,21 +10,9 @@ import {
 export function createAuthRouter(authController: AuthController): Router {
   const router = Router();
 
-  router.post(
-    "/register",
-    validate(RegisterSchema),
-    authController.register.bind(authController),
-  );
-  router.post(
-    "/login",
-    validate(LoginSchema),
-    authController.login.bind(authController),
-  );
-  router.post(
-    "/refresh",
-    validate(RefreshTokenSchema),
-    authController.refresh.bind(authController),
-  );
+  router.post("/register", validate(RegisterSchema), authController.register);
+  router.post("/login", validate(LoginSchema), authController.login);
+  router.post("/refresh", validate(RefreshTokenSchema), authController.refresh);
 
   return router;
 }
