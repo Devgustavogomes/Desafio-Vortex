@@ -10,18 +10,21 @@ export class RefreshTokenUseCase {
   ) {}
 
   async execute(input: RefreshTokenInput) {
-    const userId = await this.refreshTokenRepository.find(input.refreshToken);
-    if (!userId) {
-      throw new UnauthorizedError('Invalid refresh token');
-    }
-
+    let decoded;
     try {
-      this.tokenService.verifyRefreshToken(input.refreshToken);
+      decoded = this.tokenService.verifyRefreshToken(input.refreshToken);
     } catch (error) {
       throw new UnauthorizedError('Invalid or expired refresh token');
     }
 
-    await this.refreshTokenRepository.delete(input.refreshToken);
+    const { userId } = decoded;
+
+    const storedToken = await this.refreshTokenRepository.find(userId);
+    if (!storedToken || storedToken !== input.refreshToken) {
+      throw new UnauthorizedError('Invalid refresh token');
+    }
+
+    await this.refreshTokenRepository.delete(userId);
 
     const newAccessToken = this.tokenService.generateAccessToken(userId);
     const newRefreshToken = this.tokenService.generateRefreshToken(userId);

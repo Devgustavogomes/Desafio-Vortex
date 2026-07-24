@@ -14,7 +14,7 @@ export class LoginUseCase {
 
   async execute(input: LoginInput) {
     const user = await this.userRepository.findByEmail(input.email);
-    if (!user || !user.password) {
+    if (!user) {
       throw new UnauthorizedError("Invalid credentials");
     }
 
