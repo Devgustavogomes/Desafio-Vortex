@@ -26,7 +26,9 @@ export class MongoUserRepository implements IUserRepository {
     id: string,
     data: Partial<Pick<User, "name" | "email" | "password">>,
   ): Promise<User | null> {
-    const doc = await UserModel.findByIdAndUpdate(id, data, { new: true }).lean();
+    const doc = await UserModel.findByIdAndUpdate(id, data, {
+      new: true,
+    }).lean();
     if (!doc) return null;
     return this.mapToDomain(doc);
   }
