@@ -15,3 +15,17 @@ export function validate(schema: ZodSchema) {
     next();
   };
 }
+
+export function validateParams(schema: ZodSchema) {
+  return (req: Request, _res: Response, next: NextFunction): void => {
+    const result = schema.safeParse(req.params);
+
+    if (!result.success) {
+      next(new ValidationError("Validation failed", result.error.issues));
+      return;
+    }
+
+    req.params = result.data as Record<string, string>;
+    next();
+  };
+}

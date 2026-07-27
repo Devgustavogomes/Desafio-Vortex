@@ -1,6 +1,5 @@
 import { IItemRepository } from "../../domain/repositories/IItemRepository";
 import { Item } from "../../domain/entities/Item";
-import { ItemType } from "../../domain/enums/ItemType";
 import { Price } from "@/shared/domain/valueObjects/Price";
 import { NotFoundError } from "@/shared/errors/NotFoundError";
 import { ForbiddenError } from "@/shared/errors/ForbiddenError";
@@ -33,8 +32,7 @@ export class UpdateItemUseCase {
     }
 
     if (input.type !== undefined) {
-      // TODO (Task 04): remover cast quando o Zod garantir o tipo de `type`
-      item.type = input.type as ItemType;
+      item.type = input.type;
     }
 
     const updated = await this.repository.update(id, item);
