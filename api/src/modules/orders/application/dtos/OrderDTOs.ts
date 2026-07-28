@@ -17,3 +17,9 @@ export const orderIdParamSchema = z.object({
 });
 
 export type OrderIdParam = z.infer<typeof orderIdParamSchema>;
+
+export const updateOrderSchema = z.object({
+  action: z.enum(["accept", "reject"], { message: "Action must be 'accept' or 'reject'" }),
+});
+
+export type UpdateOrderInput = z.infer<typeof updateOrderSchema>;
