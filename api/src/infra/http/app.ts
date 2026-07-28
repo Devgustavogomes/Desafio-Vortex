@@ -4,6 +4,7 @@ import helmet from "helmet";
 import { env } from "@/infra/config/env";
 import { errorMiddleware } from "@/infra/http/middlewares/errorMiddleware";
 import { authRouter } from "@/modules/auth/auth.module";
+import { itemRouter } from "@/modules/items/items.module";
 
 export function createApp() {
   const app = express();
@@ -23,6 +24,7 @@ export function createApp() {
   });
 
   app.use(authRouter);
+  app.use(itemRouter);
 
   app.use(errorMiddleware);
 
