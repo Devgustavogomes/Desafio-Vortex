@@ -2,21 +2,21 @@ import { IRefreshTokenRepository } from '../../domain/repositories/IRefreshToken
 import { TokenService } from '../services/TokenService';
 import { UnauthorizedError } from '../../../../shared/errors/UnauthorizedError';
 
-export class RefreshTokenUseCase {
+export class LogoutUseCase {
   constructor(
     private refreshTokenRepository: IRefreshTokenRepository,
-    private tokenService: TokenService
+    private tokenService: TokenService,
   ) {}
 
-  async execute(refreshToken: string | undefined) {
+  async execute(refreshToken: string | undefined): Promise<void> {
     if (!refreshToken) {
       throw new UnauthorizedError('No refresh token provided');
     }
 
-    let decoded;
+    let decoded: { userId: string };
     try {
       decoded = this.tokenService.verifyRefreshToken(refreshToken);
-    } catch (error) {
+    } catch {
       throw new UnauthorizedError('Invalid or expired refresh token');
     }
 
@@ -28,16 +28,5 @@ export class RefreshTokenUseCase {
     }
 
     await this.refreshTokenRepository.delete(userId);
-
-    const newAccessToken = this.tokenService.generateAccessToken(userId);
-    const newRefreshToken = this.tokenService.generateRefreshToken(userId);
-
-    const ttlSeconds = 7 * 24 * 60 * 60; 
-    await this.refreshTokenRepository.save(userId, newRefreshToken, ttlSeconds);
-
-    return {
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
-    };
   }
 }

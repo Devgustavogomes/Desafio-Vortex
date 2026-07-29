@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, Mocked } from "vitest";
-import { IUserRepository } from "../../../../user/domain/repositories/IUserRepository";
+import { IAuthRepository } from "../../../domain/repositories/IAuthRepository";
 import { IRefreshTokenRepository } from "../../../domain/repositories/IRefreshTokenRepository";
 import { TokenService } from "../../services/TokenService";
 import { ConflictError } from "../../../../../shared/errors/ConflictError";
@@ -14,18 +14,15 @@ vi.mock("bcryptjs", () => ({
 
 describe("RegisterUseCase", () => {
   let registerUseCase: RegisterUseCase;
-  let mockUserRepository: Mocked<IUserRepository>;
+  let mockAuthRepository: Mocked<IAuthRepository>;
   let mockRefreshTokenRepository: Mocked<IRefreshTokenRepository>;
   let mockTokenService: Mocked<TokenService>;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUserRepository = {
-      findById: vi.fn(),
+    mockAuthRepository = {
       findByEmail: vi.fn(),
       create: vi.fn(),
-      update: vi.fn(),
-      delete: vi.fn(),
     };
 
     mockRefreshTokenRepository = {
@@ -42,7 +39,7 @@ describe("RegisterUseCase", () => {
     } as any;
 
     registerUseCase = new RegisterUseCase(
-      mockUserRepository,
+      mockAuthRepository,
       mockRefreshTokenRepository,
       mockTokenService,
     );
@@ -61,20 +58,20 @@ describe("RegisterUseCase", () => {
       updatedAt: new Date(),
     };
 
-    mockUserRepository.findByEmail.mockResolvedValue(null);
+    mockAuthRepository.findByEmail.mockResolvedValue(null);
     (bcrypt.hash as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
       "hashed_password",
     );
-    mockUserRepository.create.mockResolvedValue(createdUser);
+    mockAuthRepository.create.mockResolvedValue(createdUser);
     mockTokenService.generateAccessToken.mockReturnValue("access_token");
     mockTokenService.generateRefreshToken.mockReturnValue("refresh_token");
     mockRefreshTokenRepository.save.mockResolvedValue();
 
     const result = await registerUseCase.execute(input);
 
-    expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(input.email);
+    expect(mockAuthRepository.findByEmail).toHaveBeenCalledWith(input.email);
     expect(bcrypt.hash).toHaveBeenCalledWith(input.password, 10);
-    expect(mockUserRepository.create).toHaveBeenCalledWith({
+    expect(mockAuthRepository.create).toHaveBeenCalledWith({
       name: input.name,
       email: input.email,
       password: "hashed_password",
@@ -97,7 +94,6 @@ describe("RegisterUseCase", () => {
       accessToken: "access_token",
       refreshToken: "refresh_token",
     });
-    // Ensure password is not returned
     expect((result.user as any).password).toBeUndefined();
   });
 
@@ -107,7 +103,7 @@ describe("RegisterUseCase", () => {
       email: "test@example.com",
       password: "password123",
     };
-    mockUserRepository.findByEmail.mockResolvedValue({
+    mockAuthRepository.findByEmail.mockResolvedValue({
       id: "1",
       ...input,
       createdAt: new Date(),
@@ -115,6 +111,6 @@ describe("RegisterUseCase", () => {
     });
 
     await expect(registerUseCase.execute(input)).rejects.toThrow(ConflictError);
-    expect(mockUserRepository.create).not.toHaveBeenCalled();
+    expect(mockAuthRepository.create).not.toHaveBeenCalled();
   });
 });

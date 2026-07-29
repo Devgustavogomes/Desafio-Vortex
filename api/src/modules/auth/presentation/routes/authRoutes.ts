@@ -1,18 +1,15 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/AuthController";
 import { validate } from "../../../../infra/http/middlewares/validateMiddleware";
-import {
-  RegisterSchema,
-  LoginSchema,
-  RefreshTokenSchema,
-} from "../../application/dtos/AuthDTOs";
+import { RegisterSchema, LoginSchema } from "../../application/dtos/AuthDTOs";
 
 export function createAuthRouter(authController: AuthController): Router {
   const router = Router();
 
-  router.post("/register", validate(RegisterSchema), authController.register);
-  router.post("/login", validate(LoginSchema), authController.login);
-  router.post("/refresh", validate(RefreshTokenSchema), authController.refresh);
+  router.post("/auth/register", validate(RegisterSchema), authController.register);
+  router.post("/auth/login", validate(LoginSchema), authController.login);
+  router.post("/auth/refresh", authController.refresh);
+  router.post("/auth/logout", authController.logout);
 
   return router;
 }

@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import { env } from "@/infra/config/env";
 import { errorMiddleware } from "@/infra/http/middlewares/errorMiddleware";
 import { authRouter } from "@/modules/auth/auth.module";
@@ -16,9 +17,11 @@ export function createApp() {
       origin: env.CORS_ORIGIN,
       methods: ["GET", "POST", "PUT", "DELETE"],
       allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
     }),
   );
   app.use(express.json());
+  app.use(cookieParser());
 
   app.get("/health", (_req, res) => {
     res.json({ status: "ok" });
@@ -29,7 +32,6 @@ export function createApp() {
   app.use(orderRouter);
 
   app.use(errorMiddleware);
-
 
   return app;
 }

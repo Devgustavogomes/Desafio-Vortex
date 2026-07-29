@@ -1,4 +1,4 @@
-import { IUserRepository } from "../../../user/domain/repositories/IUserRepository";
+import { IAuthRepository } from '../../domain/repositories/IAuthRepository';
 import { IRefreshTokenRepository } from "../../domain/repositories/IRefreshTokenRepository";
 import { TokenService } from "../services/TokenService";
 import { UnauthorizedError } from "../../../../shared/errors/UnauthorizedError";
@@ -7,18 +7,19 @@ import { LoginInput } from "../dtos/AuthDTOs";
 
 export class LoginUseCase {
   constructor(
-    private userRepository: IUserRepository,
+    private authRepository: IAuthRepository,
     private refreshTokenRepository: IRefreshTokenRepository,
     private tokenService: TokenService,
   ) {}
 
   async execute(input: LoginInput) {
-    const user = await this.userRepository.findByEmail(input.email);
+    const user = await this.authRepository.findByEmail(input.email);
     if (!user) {
       throw new UnauthorizedError("Invalid credentials");
     }
 
     const isPasswordValid = await bcrypt.compare(input.password, user.password);
+
     if (!isPasswordValid) {
       throw new UnauthorizedError("Invalid credentials");
     }

@@ -40,9 +40,7 @@ describe("RefreshTokenUseCase", () => {
     mockRefreshTokenRepository.delete.mockResolvedValue();
     mockRefreshTokenRepository.save.mockResolvedValue();
 
-    const result = await refreshTokenUseCase.execute({
-      refreshToken: oldToken,
-    });
+    const result = await refreshTokenUseCase.execute(oldToken);
 
     expect(mockTokenService.verifyRefreshToken).toHaveBeenCalledWith(oldToken);
     expect(mockRefreshTokenRepository.find).toHaveBeenCalledWith(userId);
@@ -57,6 +55,13 @@ describe("RefreshTokenUseCase", () => {
     });
   });
 
+  it("should throw UnauthorizedError if refreshToken is undefined", async () => {
+    await expect(
+      refreshTokenUseCase.execute(undefined),
+    ).rejects.toThrow(UnauthorizedError);
+    expect(mockTokenService.verifyRefreshToken).not.toHaveBeenCalled();
+  });
+
   it("should throw UnauthorizedError if token not found in repository", async () => {
     const oldToken = "invalid_refresh_token";
     const userId = "1";
@@ -65,7 +70,7 @@ describe("RefreshTokenUseCase", () => {
     mockRefreshTokenRepository.find.mockResolvedValue(null);
 
     await expect(
-      refreshTokenUseCase.execute({ refreshToken: oldToken }),
+      refreshTokenUseCase.execute(oldToken),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -77,7 +82,7 @@ describe("RefreshTokenUseCase", () => {
     mockRefreshTokenRepository.find.mockResolvedValue("different_token");
 
     await expect(
-      refreshTokenUseCase.execute({ refreshToken: oldToken }),
+      refreshTokenUseCase.execute(oldToken),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -89,7 +94,7 @@ describe("RefreshTokenUseCase", () => {
     });
 
     await expect(
-      refreshTokenUseCase.execute({ refreshToken: oldToken }),
+      refreshTokenUseCase.execute(oldToken),
     ).rejects.toThrow(UnauthorizedError);
     expect(mockRefreshTokenRepository.find).not.toHaveBeenCalled();
   });

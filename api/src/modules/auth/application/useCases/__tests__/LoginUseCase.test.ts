@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, Mocked } from "vitest";
-import { IUserRepository } from "../../../../user/domain/repositories/IUserRepository";
+import { IAuthRepository } from "../../../domain/repositories/IAuthRepository";
 import { IRefreshTokenRepository } from "../../../domain/repositories/IRefreshTokenRepository";
 import { TokenService } from "../../services/TokenService";
 import { UnauthorizedError } from "../../../../../shared/errors/UnauthorizedError";
@@ -14,18 +14,15 @@ vi.mock("bcryptjs", () => ({
 
 describe("LoginUseCase", () => {
   let loginUseCase: LoginUseCase;
-  let mockUserRepository: Mocked<IUserRepository>;
+  let mockAuthRepository: Mocked<IAuthRepository>;
   let mockRefreshTokenRepository: Mocked<IRefreshTokenRepository>;
   let mockTokenService: Mocked<TokenService>;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUserRepository = {
-      findById: vi.fn(),
+    mockAuthRepository = {
       findByEmail: vi.fn(),
       create: vi.fn(),
-      update: vi.fn(),
-      delete: vi.fn(),
     };
 
     mockRefreshTokenRepository = {
@@ -42,7 +39,7 @@ describe("LoginUseCase", () => {
     };
 
     loginUseCase = new LoginUseCase(
-      mockUserRepository,
+      mockAuthRepository,
       mockRefreshTokenRepository,
       mockTokenService,
     );
@@ -59,7 +56,7 @@ describe("LoginUseCase", () => {
       updatedAt: new Date(),
     };
 
-    mockUserRepository.findByEmail.mockResolvedValue(user);
+    mockAuthRepository.findByEmail.mockResolvedValue(user);
     (bcrypt.compare as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
       true,
     );
@@ -69,7 +66,7 @@ describe("LoginUseCase", () => {
 
     const result = await loginUseCase.execute(input);
 
-    expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(input.email);
+    expect(mockAuthRepository.findByEmail).toHaveBeenCalledWith(input.email);
     expect(bcrypt.compare).toHaveBeenCalledWith(input.password, user.password);
     expect(mockTokenService.generateAccessToken).toHaveBeenCalledWith(user.id);
     expect(mockTokenService.generateRefreshToken).toHaveBeenCalledWith(user.id);
@@ -90,7 +87,7 @@ describe("LoginUseCase", () => {
 
   it("should throw UnauthorizedError if user not found", async () => {
     const input = { email: "test@example.com", password: "password123" };
-    mockUserRepository.findByEmail.mockResolvedValue(null);
+    mockAuthRepository.findByEmail.mockResolvedValue(null);
 
     await expect(loginUseCase.execute(input)).rejects.toThrow(
       UnauthorizedError,
@@ -109,7 +106,7 @@ describe("LoginUseCase", () => {
       updatedAt: new Date(),
     };
 
-    mockUserRepository.findByEmail.mockResolvedValue(user);
+    mockAuthRepository.findByEmail.mockResolvedValue(user);
     (bcrypt.compare as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
       false,
     );
