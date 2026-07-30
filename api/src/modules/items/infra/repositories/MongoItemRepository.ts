@@ -3,6 +3,7 @@ import { Item } from "../../domain/entities/Item";
 import { Price } from "@/shared/domain/valueObjects/Price";
 import { ItemType } from "../../domain/enums/ItemType";
 import { ItemStatus } from "../../domain/enums/ItemStatus";
+import { ItemCondition } from "../../domain/enums/ItemCondition";
 import { ItemModel, IItemDocument } from "../models/ItemModel";
 
 export class MongoItemRepository implements IItemRepository {
@@ -15,7 +16,9 @@ export class MongoItemRepository implements IItemRepository {
       price: Price.fromCents(doc.price),
       type: doc.type as ItemType,
       status: doc.status as ItemStatus,
+      condition: doc.condition as ItemCondition,
       owner: doc.owner,
+      imageUrl: doc.imageUrl,
     });
   }
 
@@ -27,7 +30,9 @@ export class MongoItemRepository implements IItemRepository {
     price: number;
     type: string;
     status: string;
+    condition: string;
     owner: string;
+    imageUrl?: string;
   } {
     return {
       _id: item.id,
@@ -36,7 +41,9 @@ export class MongoItemRepository implements IItemRepository {
       price: item.price.toCents(),
       type: item.type,
       status: item.status,
+      condition: item.condition,
       owner: item.owner,
+      imageUrl: item.imageUrl,
     };
   }
 

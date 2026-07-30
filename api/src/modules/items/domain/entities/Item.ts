@@ -2,13 +2,16 @@ import { randomUUID } from "crypto";
 import { Price } from "@/shared/domain/valueObjects/Price";
 import { ItemType } from "../enums/ItemType";
 import { ItemStatus } from "../enums/ItemStatus";
+import { ItemCondition } from "../enums/ItemCondition";
 
 export interface ItemProps {
   name: string;
   description: string;
   price: Price;
   type: ItemType;
+  condition: ItemCondition;
   owner: string;
+  imageUrl?: string;
 }
 
 export interface RestoreItemProps {
@@ -18,7 +21,9 @@ export interface RestoreItemProps {
   price: Price;
   type: ItemType;
   status: ItemStatus;
+  condition: ItemCondition;
   owner: string;
+  imageUrl?: string;
 }
 
 export class Item {
@@ -28,7 +33,9 @@ export class Item {
   private _price: Price;
   private _type: ItemType;
   private _status: ItemStatus;
+  private _condition: ItemCondition;
   private _owner: string;
+  private _imageUrl?: string;
 
   private constructor(
     id: string,
@@ -37,7 +44,9 @@ export class Item {
     price: Price,
     type: ItemType,
     status: ItemStatus,
+    condition: ItemCondition,
     owner: string,
+    imageUrl?: string,
   ) {
     this._id = id;
     this._name = name;
@@ -45,7 +54,9 @@ export class Item {
     this._price = price;
     this._type = type;
     this._status = status;
+    this._condition = condition;
     this._owner = owner;
+    this._imageUrl = imageUrl;
   }
 
   /** Factory method para criação de um novo item.
@@ -58,7 +69,9 @@ export class Item {
       props.price,
       props.type,
       ItemStatus.AVAILABLE,
+      props.condition,
       props.owner,
+      props.imageUrl,
     );
   }
 
@@ -71,7 +84,9 @@ export class Item {
       props.price,
       props.type,
       props.status,
+      props.condition,
       props.owner,
+      props.imageUrl,
     );
   }
 
@@ -101,8 +116,16 @@ export class Item {
     return this._status;
   }
 
+  get condition(): ItemCondition {
+    return this._condition;
+  }
+
   get owner(): string {
     return this._owner;
+  }
+
+  get imageUrl(): string | undefined {
+    return this._imageUrl;
   }
 
   // ─── Setters ────────────────────────────────────────────────────────────────
@@ -121,6 +144,14 @@ export class Item {
 
   set type(value: ItemType) {
     this._type = value;
+  }
+
+  set condition(value: ItemCondition) {
+    this._condition = value;
+  }
+
+  set imageUrl(value: string | undefined) {
+    this._imageUrl = value;
   }
 
   // ─── Métodos de domínio ──────────────────────────────────────────────────────

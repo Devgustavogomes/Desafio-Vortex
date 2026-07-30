@@ -7,7 +7,9 @@ export interface IItemDocument extends Document<string> {
   price: number;
   type: string;
   status: string;
+  condition: string;
   owner: string;
+  imageUrl?: string;
 }
 
 const itemSchema = new Schema<IItemDocument>(
@@ -23,7 +25,13 @@ const itemSchema = new Schema<IItemDocument>(
       default: "available",
       required: true,
     },
+    condition: {
+      type: String,
+      enum: ["NEW", "USED"],
+      required: true,
+    },
     owner: { type: String, required: true },
+    imageUrl: { type: String, required: false },
   },
   { timestamps: true },
 );

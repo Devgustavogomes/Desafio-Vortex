@@ -23,7 +23,9 @@ export class ItemController {
       price: item.price.toFloat(),
       type: item.type,
       status: item.status,
+      condition: item.condition,
       owner: item.owner,
+      imageUrl: item.imageUrl,
     };
   }
 

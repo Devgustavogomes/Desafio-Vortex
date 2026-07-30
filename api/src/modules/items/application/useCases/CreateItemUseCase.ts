@@ -14,7 +14,9 @@ export class CreateItemUseCase {
       description: input.description,
       price,
       type: input.type,
+      condition: input.condition,
       owner: userId,
+      imageUrl: input.imageUrl,
     });
 
     return this.repository.create(item);

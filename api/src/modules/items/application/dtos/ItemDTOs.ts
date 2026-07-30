@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ItemType } from "../../domain/enums/ItemType";
 import { ItemStatus } from "../../domain/enums/ItemStatus";
+import { ItemCondition } from "../../domain/enums/ItemCondition";
 
 // ─── createItemSchema ──────────────────────────────────────────────────────────
 
@@ -9,6 +10,10 @@ export const createItemSchema = z.object({
   description: z.string().min(1, "Description is required"),
   price: z.number().positive("Price must be positive"),
   type: z.enum(ItemType, { message: "Type must be 'sale' or 'donation'" }),
+  condition: z.enum(ItemCondition, {
+    message: "Condition must be 'NEW' or 'USED'",
+  }),
+  imageUrl: z.string().url().optional(),
 });
 
 export type CreateItemInput = z.infer<typeof createItemSchema>;
@@ -27,6 +32,10 @@ export const updateItemSchema = z.object({
       message: "Status must be 'available', 'reserved' or 'selled'",
     })
     .optional(),
+  condition: z
+    .enum(ItemCondition, { message: "Condition must be 'NEW' or 'USED'" })
+    .optional(),
+  imageUrl: z.string().url().optional(),
 });
 
 export type UpdateItemInput = z.infer<typeof updateItemSchema>;

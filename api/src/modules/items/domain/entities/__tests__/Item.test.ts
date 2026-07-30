@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { Item } from "../Item";
 import { ItemType } from "../../enums/ItemType";
 import { ItemStatus } from "../../enums/ItemStatus";
+import { ItemCondition } from "../../enums/ItemCondition";
 import { Price } from "@/shared/domain/valueObjects/Price";
 
 const makeItem = (overrides?: Partial<Parameters<typeof Item.create>[0]>) =>
@@ -10,6 +11,7 @@ const makeItem = (overrides?: Partial<Parameters<typeof Item.create>[0]>) =>
     description: "Cadeira ergonômica em ótimo estado",
     price: Price.fromFloat(350.0),
     type: ItemType.SALE,
+    condition: ItemCondition.USED,
     owner: "user-abc-123",
     ...overrides,
   });
@@ -42,6 +44,7 @@ describe("Item", () => {
         description: "Cadeira ergonômica em ótimo estado",
         price,
         type: ItemType.SALE,
+        condition: ItemCondition.USED,
         owner: "user-abc-123",
       });
 
@@ -70,6 +73,7 @@ describe("Item", () => {
         price,
         type: ItemType.SALE,
         status: ItemStatus.RESERVED,
+        condition: ItemCondition.USED,
         owner: "owner-xyz",
       });
 
@@ -90,6 +94,7 @@ describe("Item", () => {
         price: Price.fromFloat(80.0),
         type: ItemType.SALE,
         status: ItemStatus.SELLED,
+        condition: ItemCondition.USED,
         owner: "owner-1",
       });
 
@@ -148,6 +153,7 @@ describe("Item", () => {
         price: Price.fromFloat(10),
         type: ItemType.SALE,
         status: ItemStatus.SELLED,
+        condition: ItemCondition.NEW,
         owner: "owner-1",
       });
       expect(() => item.reserve()).toThrow();

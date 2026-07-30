@@ -35,6 +35,14 @@ export class UpdateItemUseCase {
       item.type = input.type;
     }
 
+    if (input.condition !== undefined) {
+      item.condition = input.condition;
+    }
+
+    if (input.imageUrl !== undefined) {
+      item.imageUrl = input.imageUrl;
+    }
+
     const updated = await this.repository.update(id, item);
 
     if (!updated) {
