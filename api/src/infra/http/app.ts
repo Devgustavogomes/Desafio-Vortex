@@ -7,6 +7,7 @@ import { errorMiddleware } from "@/infra/http/middlewares/errorMiddleware";
 import { authRouter } from "@/modules/auth/auth.module";
 import { itemRouter } from "@/modules/items/items.module";
 import { orderRouter } from "@/modules/orders/orders.module";
+import { userRouter } from "@/modules/user/user.module";
 
 export function createApp() {
   const app = express();
@@ -30,6 +31,7 @@ export function createApp() {
   app.use(authRouter);
   app.use(itemRouter);
   app.use(orderRouter);
+  app.use(userRouter);
 
   app.use(errorMiddleware);
 
