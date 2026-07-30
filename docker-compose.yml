@@ -1,0 +1,42 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: vortex-api
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./api/.env
+    networks:
+      - backend_network
+    depends_on:
+      - mongo
+      - redis
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:latest
+    container_name: vortex-mongo
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - backend_network
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    container_name: vortex-redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend_network
+    restart: unless-stopped
+
+networks:
+  backend_network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  redis_data:

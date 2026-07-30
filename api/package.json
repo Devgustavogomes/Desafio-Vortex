@@ -2,10 +2,11 @@
   "name": "desafio-vortex-api",
   "version": "1.0.0",
   "description": "Student marketplace API — Clean Architecture + DDD",
+  "type": "module",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build": "tsc && tsc-alias -f",
     "start": "node dist/server.js",
     "test": "vitest",
     "test:run": "vitest run",
@@ -39,6 +40,7 @@
     "@typescript-eslint/parser": "^8.65.0",
     "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^10.7.0",
+    "tsc-alias": "^1.9.1",
     "tsx": "^4.23.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"
