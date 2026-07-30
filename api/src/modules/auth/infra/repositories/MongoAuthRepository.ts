@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { IAuthRepository } from "../../domain/repositories/IAuthRepository";
 import { AuthUser } from "../../domain/entities/AuthUser";
-import { UserModel, IUserDocument } from "../models/UserModel";
+import { UserModel, IUserDocument } from "@/modules/user/infra/models/UserModel";
 
 export class MongoAuthRepository implements IAuthRepository {
   private toDomain(doc: IUserDocument): AuthUser {
