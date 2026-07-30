@@ -28,6 +28,25 @@ export default defineConfig({
             type: 'image/png',
           }
         ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff,ttf}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^http:\/\/localhost:3000\/items/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 1 semana
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          }
+        ]
       }
     })
   ],
