@@ -1,3 +1,4 @@
+import { api } from "./api";
 import type { ItemStatus } from "../components/ui/ItemCard/ItemCard";
 
 export interface ApiItem {
@@ -20,15 +21,9 @@ export interface ShowcaseItem {
   imageUrl?: string;
 }
 
-const API_URL = "http://localhost:3000"; // Base API URL
-
 export async function fetchShowcaseItems(): Promise<ShowcaseItem[]> {
   try {
-    const response = await fetch(`${API_URL}/items`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch items: ${response.statusText}`);
-    }
-    const data: ApiItem[] = await response.json();
+    const { data } = await api.get<ApiItem[]>("/items");
 
     return data.map((item) => {
       let mappedStatus: ItemStatus = "Usado";
