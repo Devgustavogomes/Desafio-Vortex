@@ -12,8 +12,8 @@ const envSchema = z.object({
   REDIS_URL: z.string().min(1, "REDIS_URL é obrigatório"),
   JWT_ACCESS_SECRET: z.string().min(1, "JWT_ACCESS_SECRET é obrigatório"),
   JWT_REFRESH_SECRET: z.string().min(1, "JWT_REFRESH_SECRET é obrigatório"),
-  JWT_ACCESS_EXPIRATION: z.string().default("15m"),
-  JWT_REFRESH_EXPIRATION: z.string().default("7d"),
+  JWT_ACCESS_EXPIRATION: z.string().default("900"),
+  JWT_REFRESH_EXPIRATION: z.string().default("604800"),
   CORS_ORIGIN: z.string().default("*"),
 });
 
