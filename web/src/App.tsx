@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import styles from './App.module.css';
 import { Header } from './components/layout/Header/Header';
 import { Footer } from './components/layout/Footer/Footer';
-import { LandingPage } from './features/landing/LandingPage';
+import { AppRouter } from './routes/AppRouter';
 
 function App() {
   useEffect(() => {
@@ -22,7 +22,7 @@ function App() {
   return (
     <div className={styles.appContainer}>
       <Header />
-      <LandingPage />
+      <AppRouter />
       <Footer />
     </div>
   );
