@@ -2,4 +2,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* prevent horizontal scroll on mobile */
 }
+

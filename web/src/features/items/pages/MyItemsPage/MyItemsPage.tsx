@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./MyItemsPage.module.css";
 import { Button } from "../../../../components/ui/Button/Button";
+import { Toast } from "../../../../components/ui/Toast/Toast";
 import {
   ItemCard,
   type ItemStatus as UIItemStatus,
@@ -14,9 +16,22 @@ import {
 } from "../../../../types/items.types";
 
 export function MyItemsPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Read success message passed via navigate state
+  useEffect(() => {
+    const state = location.state as { successMessage?: string } | null;
+    if (state?.successMessage) {
+      setToastMessage(state.successMessage);
+      // Clear the navigate state to prevent showing again on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const fetchItems = async () => {
     try {
@@ -25,7 +40,7 @@ export function MyItemsPage() {
       const data = await getUserItems();
       setItems(data);
     } catch (err) {
-      console.error('Erro ao buscar os itens do usuário:', err);
+      console.error("Erro ao buscar os itens do usuário:", err);
       setError(
         "Ocorreu um erro ao carregar seus itens. Tente novamente mais tarde.",
       );
@@ -39,9 +54,7 @@ export function MyItemsPage() {
   }, []);
 
   const handleEdit = (id: string) => {
-    // Placeholder for now
-    alert("A edição de itens será implementada em breve!");
-    console.log('Editar item:', id);
+    navigate(`/my-items/edit/${id}`);
   };
 
   const handleDelete = async (id: string) => {
@@ -54,14 +67,13 @@ export function MyItemsPage() {
       await deleteItem(id);
       setItems((prevItems) => prevItems.filter((item) => item.id !== id));
     } catch (err) {
-      console.error('Erro ao deletar item:', err);
+      console.error("Erro ao deletar item:", err);
       alert("Não foi possível excluir o item. Tente novamente.");
     }
   };
 
   const handleAddNewItem = () => {
-    // Placeholder for now
-    alert("A criação de novos itens será implementada em breve!");
+    navigate("/my-items/new");
   };
 
   const mapItemToUI = (item: Item) => {
@@ -114,6 +126,15 @@ export function MyItemsPage() {
 
   return (
     <div className={styles.page}>
+      {/* Toast notification */}
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          variant="success"
+          onClose={() => setToastMessage(null)}
+        />
+      )}
+
       <header className={styles.header}>
         <h2>Meus Itens</h2>
         <Button variant="primary" onClick={handleAddNewItem}>
