@@ -43,7 +43,7 @@ export type UpdateItemInput = z.infer<typeof updateItemSchema>;
 // ─── itemIdParamSchema ─────────────────────────────────────────────────────────
 
 export const itemIdParamSchema = z.object({
-  id: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ObjectId format"),
+  id: z.uuid("Invalid UUID format"),
 });
 
 export type ItemIdParam = z.infer<typeof itemIdParamSchema>;

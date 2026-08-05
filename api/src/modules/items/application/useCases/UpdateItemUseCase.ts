@@ -8,7 +8,11 @@ import { UpdateItemInput } from "../dtos/ItemDTOs";
 export class UpdateItemUseCase {
   constructor(private readonly repository: IItemRepository) {}
 
-  async execute(id: string, input: UpdateItemInput, userId: string): Promise<Item> {
+  async execute(
+    id: string,
+    input: UpdateItemInput,
+    userId: string,
+  ): Promise<Item> {
     const item = await this.repository.findById(id);
 
     if (!item) {

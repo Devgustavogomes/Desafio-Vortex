@@ -38,6 +38,12 @@ export function createItemRouter(itemController: ItemController): Router {
     validate(updateItemSchema),
     itemController.update,
   );
+  router.post(
+    "/items/:id/reserve",
+    authMiddleware,
+    validateParams(itemIdParamSchema),
+    itemController.reserve,
+  );
   router.delete(
     "/items/:id",
     authMiddleware,
