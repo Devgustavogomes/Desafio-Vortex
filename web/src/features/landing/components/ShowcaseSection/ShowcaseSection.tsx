@@ -4,11 +4,13 @@ import { ItemCard } from '../../../../components/ui/ItemCard/ItemCard';
 import { SkeletonItemCard } from '../../../../components/ui/ItemCard/SkeletonItemCard';
 import { Button } from '../../../../components/ui/Button/Button';
 import { fetchShowcaseItems, type ShowcaseItem } from '../../../../services/items.service';
+import { useNavigate } from 'react-router-dom';
 
 export const ShowcaseSection = () => {
   const [items, setItems] = useState<ShowcaseItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let isMounted = true;
@@ -69,7 +71,7 @@ export const ShowcaseSection = () => {
         </div>
         
         <div className={styles.actionContainer}>
-          <Button variant="secondary">Ver Todos os Itens</Button>
+          <Button variant="secondary" onClick={() => navigate('/feed')}>Ver Todos os Itens</Button>
         </div>
       </div>
     </section>
