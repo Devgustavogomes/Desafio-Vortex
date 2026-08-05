@@ -100,3 +100,24 @@
 .actionButton {
   width: 100%;
 }
+
+.ownerActions {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.ownerActions > button {
+  flex: 1;
+}
+
+.deleteButton {
+  color: #ef4444; /* red-500 */
+  border-color: #ef4444;
+}
+
+.deleteButton:hover {
+  background-color: #fee2e2; /* red-100 */
+  border-color: #dc2626; /* red-600 */
+  color: #dc2626;
+}

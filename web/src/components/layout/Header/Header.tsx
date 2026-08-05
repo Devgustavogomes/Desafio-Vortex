@@ -22,6 +22,9 @@ export function Header() {
         <ul className={styles.navLinks}>
           <li><a href="/#how-it-works">Como Funciona</a></li>
           <li><a href="/#showcase">Vitrine</a></li>
+          {isAuthenticated && (
+            <li><Link to="/my-items">Meus Itens</Link></li>
+          )}
         </ul>
         <div className={styles.actions}>
           {isAuthenticated ? (

@@ -9,9 +9,19 @@ interface ItemCardProps {
   status: ItemStatus;
   imageUrl?: string;
   onDetailsClick?: () => void;
+  onEditClick?: () => void;
+  onDeleteClick?: () => void;
 }
 
-export function ItemCard({ title, category, status, imageUrl, onDetailsClick }: ItemCardProps) {
+export function ItemCard({ 
+  title, 
+  category, 
+  status, 
+  imageUrl, 
+  onDetailsClick,
+  onEditClick,
+  onDeleteClick
+}: ItemCardProps) {
   const getStatusClass = (status: ItemStatus) => {
     switch (status) {
       case 'Novo': return styles.statusNew;
@@ -21,6 +31,8 @@ export function ItemCard({ title, category, status, imageUrl, onDetailsClick }: 
       default: return '';
     }
   };
+
+  const hasOwnerActions = onEditClick || onDeleteClick;
 
   return (
     <div className={`${styles.card} glass`}>
@@ -41,13 +53,36 @@ export function ItemCard({ title, category, status, imageUrl, onDetailsClick }: 
         <span className={styles.category}>{category}</span>
         <h4 className={styles.title}>{title}</h4>
         
-        <Button 
-          variant="secondary" 
-          className={styles.actionButton}
-          onClick={onDetailsClick}
-        >
-          Ver Detalhes
-        </Button>
+        {hasOwnerActions ? (
+          <div className={styles.ownerActions}>
+            {onEditClick && (
+              <Button 
+                variant="secondary" 
+                className={styles.actionButton}
+                onClick={onEditClick}
+              >
+                Editar
+              </Button>
+            )}
+            {onDeleteClick && (
+              <Button 
+                variant="outline" 
+                className={`${styles.actionButton} ${styles.deleteButton}`}
+                onClick={onDeleteClick}
+              >
+                Excluir
+              </Button>
+            )}
+          </div>
+        ) : (
+          <Button 
+            variant="secondary" 
+            className={styles.actionButton}
+            onClick={onDetailsClick}
+          >
+            Ver Detalhes
+          </Button>
+        )}
       </div>
     </div>
   );
