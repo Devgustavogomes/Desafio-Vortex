@@ -16,6 +16,11 @@ export function createItemRouter(itemController: ItemController): Router {
 
   router.get("/items", itemController.listAll);
   router.get(
+    "/items/me",
+    authMiddleware,
+    itemController.listUserItems,
+  );
+  router.get(
     "/items/:id",
     validateParams(itemIdParamSchema),
     itemController.getById,

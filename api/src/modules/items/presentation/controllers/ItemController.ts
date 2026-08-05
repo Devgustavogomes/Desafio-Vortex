@@ -4,6 +4,7 @@ import { ListAllItemsUseCase } from "../../application/useCases/ListAllItemsUseC
 import { GetItemByIdUseCase } from "../../application/useCases/GetItemByIdUseCase";
 import { UpdateItemUseCase } from "../../application/useCases/UpdateItemUseCase";
 import { DeleteItemUseCase } from "../../application/useCases/DeleteItemUseCase";
+import { ListUserItemsUseCase } from "../../application/useCases/ListUserItemsUseCase";
 import { Item } from "../../domain/entities/Item";
 
 export class ItemController {
@@ -13,6 +14,7 @@ export class ItemController {
     private getItemByIdUseCase: GetItemByIdUseCase,
     private updateItemUseCase: UpdateItemUseCase,
     private deleteItemUseCase: DeleteItemUseCase,
+    private listUserItemsUseCase: ListUserItemsUseCase,
   ) {}
 
   private toResponse(item: Item) {
@@ -37,6 +39,12 @@ export class ItemController {
 
   listAll = async (_req: Request, res: Response): Promise<void> => {
     const items = await this.listAllItemsUseCase.execute();
+    res.status(200).json(items.map((item) => this.toResponse(item)));
+  };
+
+  listUserItems = async (req: Request, res: Response): Promise<void> => {
+    const userId = req.userId!;
+    const items = await this.listUserItemsUseCase.execute(userId);
     res.status(200).json(items.map((item) => this.toResponse(item)));
   };
 

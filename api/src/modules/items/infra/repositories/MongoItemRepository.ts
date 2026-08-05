@@ -65,6 +65,11 @@ export class MongoItemRepository implements IItemRepository {
     return docs.map((doc) => this.toDomain(doc));
   }
 
+  async findByOwner(ownerId: string): Promise<Item[]> {
+    const docs = await ItemModel.find({ owner: ownerId });
+    return docs.map((doc) => this.toDomain(doc));
+  }
+
   async update(id: string, item: Item): Promise<Item | null> {
     const doc = await ItemModel.findByIdAndUpdate(
       id,
