@@ -1,0 +1,12 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Instalar todas as dependências (incluindo devDependencies para tsx)
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# O código-fonte é montado via bind mount no docker-compose.yml
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
