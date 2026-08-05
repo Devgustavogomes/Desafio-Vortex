@@ -5,7 +5,7 @@ import { storage } from "../utils/storage";
 // ─── Instância Axios ─────────────────────────────────────────────────────────
 
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: import.meta.env.VITE_API_URL || "/api",
   withCredentials: true, // Envia cookies (refreshToken httpOnly) automaticamente
 });
 
@@ -81,9 +81,9 @@ api.interceptors.response.use(
       // Usamos axios diretamente (não a instância api) para evitar que o
       // request interceptor injete o token expirado e crie um loop.
       const { data } = await axios.post<{ accessToken: string }>(
-        "http://localhost:3000/auth/refresh",
+        `${api.defaults.baseURL}/auth/refresh`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       const newToken = data.accessToken;
@@ -105,7 +105,7 @@ api.interceptors.response.use(
     } finally {
       isRefreshing = false;
     }
-  }
+  },
 );
 
 export { api };
