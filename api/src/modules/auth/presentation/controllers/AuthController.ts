@@ -9,7 +9,7 @@ const REFRESH_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: env.NODE_ENV === "production",
   sameSite: "strict" as const,
-  path: "/auth",
+  path: "/",
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias em ms
 };
 
@@ -46,7 +46,7 @@ export class AuthController {
   logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const refreshToken = req.cookies?.refreshToken as string | undefined;
     await this.logoutUseCase.execute(refreshToken);
-    res.clearCookie("refreshToken", { path: "/auth" });
+    res.clearCookie("refreshToken", { path: "/" });
     res.status(204).send();
   };
 }
