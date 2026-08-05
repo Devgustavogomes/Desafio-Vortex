@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { ItemForm, type ItemFormData } from "../../components/ItemForm/ItemForm";
 import { getItemById, updateItem } from "../../../../services/items.service";
 import styles from "../NewItemPage/NewItemPage.module.css";
@@ -45,7 +45,9 @@ export function EditItemPage() {
         imageUrl: data.imageUrl,
       });
       // Redirect to my items list upon success
-      navigate("/my-items");
+      navigate("/my-items", {
+        state: { successMessage: "Item atualizado com sucesso! ✅" },
+      });
     } catch (err: any) {
       console.error(err);
       setError(
@@ -70,6 +72,11 @@ export function EditItemPage() {
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.header}>
+        <nav className={styles.breadcrumb}>
+          <Link to="/my-items">Meus Itens</Link>
+          <span>/</span>
+          <span>Editar Anúncio</span>
+        </nav>
         <h1 className={styles.title}>Editar Anúncio</h1>
         <p className={styles.subtitle}>
           Atualize as informações do seu item
@@ -78,6 +85,7 @@ export function EditItemPage() {
 
       {error && (
         <div className={styles.errorMessage} role="alert">
+          <span>⚠</span>
           <span>{error}</span>
         </div>
       )}

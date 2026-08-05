@@ -9,7 +9,7 @@ import {
 import styles from "./ItemForm.module.css";
 import { useEffect } from "react";
 
-// Matches backend validation
+// Matches backend validation (ItemDTOs.ts)
 const itemFormSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório"),
   description: z.string().min(1, "A descrição é obrigatória"),
@@ -17,13 +17,12 @@ const itemFormSchema = z.object({
   type: z.enum(ItemType, { message: "Tipo inválido" }),
   condition: z.enum(ItemCondition, { message: "Condição inválida" }),
   status: z.enum(ItemStatus).optional(),
+  // Aligned with backend: z.string().url().optional()
   imageUrl: z
     .string()
-    .optional()
     .transform((val) => (val === "" ? undefined : val))
-    .refine((val) => !val || /^https?:\/\//.test(val), {
-      message: "Deve ser uma URL válida",
-    }),
+    .pipe(z.string().url("Deve ser uma URL válida (ex: https://...)").optional())
+    .optional(),
 });
 
 export type ItemFormData = z.infer<typeof itemFormSchema>;
@@ -59,7 +58,7 @@ export function ItemForm({
     },
   });
 
-  // Update default values when initialData changes (useful for edit page fetching data asynchronously)
+  // Update values when initialData changes (async fetch in edit page)
   useEffect(() => {
     if (initialData) {
       reset({
@@ -76,142 +75,182 @@ export function ItemForm({
 
   return (
     <form
-      className={styles.formContainer}
+      className={styles.formCard}
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
+      {/* ─── Basic Info ─────────────────────────────────── */}
+      <p className={styles.sectionLabel}>Informações básicas</p>
+
       <div className={styles.formGroup}>
         <label htmlFor="name" className={styles.label}>
-          Nome do Item *
+          Nome do Item <span className={styles.required}>*</span>
         </label>
         <input
           id="name"
           type="text"
-          className={styles.input}
-          placeholder="Ex: Bicicleta Caloi"
+          className={`${styles.input} ${errors.name ? styles.inputError : ""}`}
+          placeholder="Ex: Bicicleta Caloi, Cadeira ergonômica..."
           disabled={isSubmitting}
           {...register("name")}
         />
         {errors.name && (
-          <span className={styles.errorText}>{errors.name.message}</span>
+          <span className={styles.errorText}>⚠ {errors.name.message}</span>
         )}
       </div>
 
       <div className={styles.formGroup}>
         <label htmlFor="description" className={styles.label}>
-          Descrição *
+          Descrição <span className={styles.required}>*</span>
         </label>
         <textarea
           id="description"
-          className={`${styles.input} ${styles.textarea}`}
-          placeholder="Descreva os detalhes do item..."
+          className={`${styles.input} ${styles.textarea} ${
+            errors.description ? styles.inputError : ""
+          }`}
+          placeholder="Descreva o estado, detalhes e outras informações relevantes..."
           disabled={isSubmitting}
           {...register("description")}
         />
         {errors.description && (
-          <span className={styles.errorText}>{errors.description.message}</span>
+          <span className={styles.errorText}>
+            ⚠ {errors.description.message}
+          </span>
         )}
       </div>
+
+      {/* ─── Pricing & Image ────────────────────────────── */}
+      <p className={styles.sectionLabel}>Preço e imagem</p>
 
       <div className={styles.row}>
         <div className={styles.formGroup}>
           <label htmlFor="price" className={styles.label}>
-            Preço (R$) *
+            Preço (R$) <span className={styles.required}>*</span>
           </label>
-          <input
-            id="price"
-            type="number"
-            step="0.01"
-            min="0.01"
-            className={styles.input}
-            placeholder="0.00"
-            disabled={isSubmitting}
-            {...register("price", { valueAsNumber: true })}
-          />
+          <div className={styles.inputWrapper}>
+            <span className={styles.inputPrefix}>R$</span>
+            <input
+              id="price"
+              type="number"
+              step="0.01"
+              min="0.01"
+              className={`${styles.input} ${styles.inputWithPrefix} ${
+                errors.price ? styles.inputError : ""
+              }`}
+              placeholder="0,00"
+              disabled={isSubmitting}
+              {...register("price", { valueAsNumber: true })}
+            />
+          </div>
           {errors.price && (
-            <span className={styles.errorText}>{errors.price.message}</span>
+            <span className={styles.errorText}>⚠ {errors.price.message}</span>
           )}
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="imageUrl" className={styles.label}>
             URL da Imagem
+            <span className={styles.optional}>(opcional)</span>
           </label>
           <input
             id="imageUrl"
             type="url"
-            className={styles.input}
-            placeholder="https://..."
+            className={`${styles.input} ${
+              errors.imageUrl ? styles.inputError : ""
+            }`}
+            placeholder="https://exemplo.com/foto.jpg"
             disabled={isSubmitting}
             {...register("imageUrl")}
           />
-          {errors.imageUrl && (
-            <span className={styles.errorText}>{errors.imageUrl.message}</span>
+          {errors.imageUrl ? (
+            <span className={styles.errorText}>
+              ⚠ {errors.imageUrl.message}
+            </span>
+          ) : (
+            <span className={styles.hintText}>
+              Link direto para uma foto do item
+            </span>
           )}
         </div>
       </div>
 
+      {/* ─── Type & Condition ───────────────────────────── */}
+      <p className={styles.sectionLabel}>Classificação</p>
+
       <div className={styles.row}>
         <div className={styles.formGroup}>
           <label htmlFor="type" className={styles.label}>
-            Tipo de Anúncio *
+            Tipo de Anúncio <span className={styles.required}>*</span>
           </label>
           <select
             id="type"
-            className={`${styles.input} ${styles.select}`}
+            className={`${styles.input} ${styles.select} ${
+              errors.type ? styles.inputError : ""
+            }`}
             disabled={isSubmitting}
             {...register("type")}
           >
-            <option value={ItemType.SALE}>Venda</option>
-            <option value={ItemType.DONATION}>Doação</option>
+            <option value={ItemType.SALE}>🏷️ Venda</option>
+            <option value={ItemType.DONATION}>🎁 Doação</option>
           </select>
           {errors.type && (
-            <span className={styles.errorText}>{errors.type.message}</span>
+            <span className={styles.errorText}>⚠ {errors.type.message}</span>
           )}
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="condition" className={styles.label}>
-            Condição *
+            Condição <span className={styles.required}>*</span>
           </label>
           <select
             id="condition"
-            className={`${styles.input} ${styles.select}`}
+            className={`${styles.input} ${styles.select} ${
+              errors.condition ? styles.inputError : ""
+            }`}
             disabled={isSubmitting}
             {...register("condition")}
           >
-            <option value={ItemCondition.NEW}>Novo</option>
-            <option value={ItemCondition.USED}>Usado</option>
+            <option value={ItemCondition.NEW}>✨ Novo</option>
+            <option value={ItemCondition.USED}>🔄 Usado</option>
           </select>
           {errors.condition && (
-            <span className={styles.errorText}>{errors.condition.message}</span>
+            <span className={styles.errorText}>
+              ⚠ {errors.condition.message}
+            </span>
           )}
         </div>
       </div>
 
+      {/* ─── Status (edit only) ─────────────────────────── */}
       {isEdit && (
-        <div className={styles.formGroup}>
-          <label htmlFor="status" className={styles.label}>
-            Status do Item
-          </label>
-          <select
-            id="status"
-            className={`${styles.input} ${styles.select}`}
-            disabled={isSubmitting}
-            {...register("status")}
-          >
-            <option value={ItemStatus.AVAILABLE}>Disponível</option>
-            <option value={ItemStatus.RESERVED}>Reservado</option>
-            <option value={ItemStatus.SELLED}>Vendido / Doado</option>
-          </select>
-          {errors.status && (
-            <span className={styles.errorText}>{errors.status.message}</span>
-          )}
+        <div className={styles.statusSection}>
+          <span className={styles.statusBadge}>✏ Modo edição</span>
+          <div className={styles.formGroup} style={{ marginBottom: 0 }}>
+            <label htmlFor="status" className={styles.label}>
+              Status do Item
+            </label>
+            <select
+              id="status"
+              className={`${styles.input} ${styles.select}`}
+              disabled={isSubmitting}
+              {...register("status")}
+            >
+              <option value={ItemStatus.AVAILABLE}>🟢 Disponível</option>
+              <option value={ItemStatus.RESERVED}>🟡 Reservado</option>
+              <option value={ItemStatus.SELLED}>✅ Vendido / Doado</option>
+            </select>
+            {errors.status && (
+              <span className={styles.errorText}>
+                ⚠ {errors.status.message}
+              </span>
+            )}
+          </div>
         </div>
       )}
 
       <button
         type="submit"
+        id="item-form-submit"
         className={styles.submitButton}
         disabled={isSubmitting}
       >
@@ -221,9 +260,9 @@ export function ItemForm({
             Salvando...
           </>
         ) : isEdit ? (
-          "Salvar Alterações"
+          "Salvar Alterações →"
         ) : (
-          "Anunciar Item"
+          "Publicar Anúncio →"
         )}
       </button>
     </form>
