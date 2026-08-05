@@ -78,3 +78,8 @@ export async function updateItem(
 export async function deleteItem(id: string): Promise<void> {
   await api.delete(`/items/${id}`);
 }
+
+export async function reserveItem(id: string): Promise<Item> {
+  const { data } = await api.post<Item>(`/items/${id}/reserve`);
+  return data;
+}

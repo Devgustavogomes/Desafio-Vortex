@@ -164,6 +164,7 @@ export function MyItemsPage() {
                 category={uiProps.category}
                 status={uiProps.status}
                 imageUrl={uiProps.imageUrl}
+                description={item.description}
                 onEditClick={() => handleEdit(uiProps.id)}
                 onDeleteClick={() => handleDelete(uiProps.id)}
               />

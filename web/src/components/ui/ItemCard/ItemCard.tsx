@@ -8,9 +8,14 @@ interface ItemCardProps {
   category: string;
   status: ItemStatus;
   imageUrl?: string;
+  price?: number;
+  description?: string;
   onDetailsClick?: () => void;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
+  onBuyClick?: () => void;
+  isBuyDisabled?: boolean;
+  buyLabel?: string;
 }
 
 export function ItemCard({ 
@@ -18,9 +23,14 @@ export function ItemCard({
   category, 
   status, 
   imageUrl, 
+  price,
+  description,
   onDetailsClick,
   onEditClick,
-  onDeleteClick
+  onDeleteClick,
+  onBuyClick,
+  isBuyDisabled,
+  buyLabel
 }: ItemCardProps) {
   const getStatusClass = (status: ItemStatus) => {
     switch (status) {
@@ -33,6 +43,13 @@ export function ItemCard({
   };
 
   const hasOwnerActions = onEditClick || onDeleteClick;
+
+  const formatPrice = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
+  };
 
   return (
     <div className={`${styles.card} glass`}>
@@ -50,8 +67,16 @@ export function ItemCard({
       </div>
       
       <div className={styles.content}>
-        <span className={styles.category}>{category}</span>
+        <div className={styles.categoryAndPrice}>
+          <span className={styles.category}>{category}</span>
+          {price !== undefined && (
+            <span className={styles.price}>{formatPrice(price)}</span>
+          )}
+        </div>
         <h4 className={styles.title}>{title}</h4>
+        {description && (
+          <p className={styles.description}>{description}</p>
+        )}
         
         {hasOwnerActions ? (
           <div className={styles.ownerActions}>
@@ -71,6 +96,27 @@ export function ItemCard({
                 onClick={onDeleteClick}
               >
                 Excluir
+              </Button>
+            )}
+          </div>
+        ) : onBuyClick ? (
+          <div className={styles.visitorActions}>
+             <Button 
+              variant="primary" 
+              className={styles.actionButton}
+              onClick={onBuyClick}
+              disabled={isBuyDisabled}
+              style={{ opacity: isBuyDisabled ? 0.6 : 1, cursor: isBuyDisabled ? 'not-allowed' : 'pointer' }}
+            >
+              {buyLabel || 'Comprar'}
+            </Button>
+            {onDetailsClick && (
+              <Button 
+                variant="secondary" 
+                className={styles.actionButton}
+                onClick={onDetailsClick}
+              >
+                Detalhes
               </Button>
             )}
           </div>

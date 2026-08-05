@@ -6,11 +6,13 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { MyItemsPage } from "../features/items/pages/MyItemsPage/MyItemsPage";
 import { NewItemPage } from "../features/items/pages/NewItemPage/NewItemPage";
 import { EditItemPage } from "../features/items/pages/EditItemPage/EditItemPage";
+import { FeedPage } from "../features/items/pages/FeedPage/FeedPage";
 
 export function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/feed" element={<FeedPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route
