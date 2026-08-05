@@ -1,40 +1,36 @@
 import { api } from "./api";
-import type { ItemStatus } from "../components/ui/ItemCard/ItemCard";
-
-export interface ApiItem {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  type: "sale" | "donation";
-  status: "available" | "reserved" | "selled";
-  condition: "NEW" | "USED";
-  owner: string;
-  imageUrl?: string;
-}
+import type { ItemStatus as UIItemStatus } from "../components/ui/ItemCard/ItemCard";
+import {
+  type Item,
+  type CreateItemInput,
+  type UpdateItemInput,
+  ItemType,
+  ItemCondition,
+  ItemStatus,
+} from "../types/items.types";
 
 export interface ShowcaseItem {
   id: string;
   title: string;
   category: string;
-  status: ItemStatus;
+  status: UIItemStatus;
   imageUrl?: string;
 }
 
 export async function fetchShowcaseItems(): Promise<ShowcaseItem[]> {
   try {
-    const { data } = await api.get<ApiItem[]>("/items");
+    const { data } = await api.get<Item[]>("/items");
 
     return data.map((item) => {
-      let mappedStatus: ItemStatus = "Usado";
-      let mappedCategory = item.type === "donation" ? "Doação" : "Venda";
+      let mappedStatus: UIItemStatus = "Usado";
+      let mappedCategory = item.type === ItemType.DONATION ? "Doação" : "Venda";
 
-      if (item.status === "reserved") {
+      if (item.status === ItemStatus.RESERVED) {
         mappedStatus = "Reservado";
-      } else if (item.type === "donation") {
+      } else if (item.type === ItemType.DONATION) {
         mappedStatus = "Doado";
       } else {
-        mappedStatus = item.condition === "NEW" ? "Novo" : "Usado";
+        mappedStatus = item.condition === ItemCondition.NEW ? "Novo" : "Usado";
       }
 
       return {
@@ -46,7 +42,39 @@ export async function fetchShowcaseItems(): Promise<ShowcaseItem[]> {
       };
     });
   } catch (error) {
-    console.error("Error fetching items:", error);
+    console.error("Error fetching showcase items:", error);
     throw error;
   }
+}
+
+export async function getAllItems(): Promise<Item[]> {
+  const { data } = await api.get<Item[]>("/items");
+  return data;
+}
+
+export async function getUserItems(): Promise<Item[]> {
+  const { data } = await api.get<Item[]>("/items/me");
+  return data;
+}
+
+export async function getItemById(id: string): Promise<Item> {
+  const { data } = await api.get<Item>(`/items/${id}`);
+  return data;
+}
+
+export async function createItem(itemData: CreateItemInput): Promise<Item> {
+  const { data } = await api.post<Item>("/items", itemData);
+  return data;
+}
+
+export async function updateItem(
+  id: string,
+  itemData: UpdateItemInput
+): Promise<Item> {
+  const { data } = await api.put<Item>(`/items/${id}`, itemData);
+  return data;
+}
+
+export async function deleteItem(id: string): Promise<void> {
+  await api.delete(`/items/${id}`);
 }
