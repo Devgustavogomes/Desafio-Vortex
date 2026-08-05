@@ -22,8 +22,8 @@ export async function fetchShowcaseItems(): Promise<ShowcaseItem[]> {
     const { data } = await api.get<Item[]>("/items");
 
     return data.map((item) => {
-      let mappedStatus: UIItemStatus = "Usado";
-      let mappedCategory = item.type === ItemType.DONATION ? "Doação" : "Venda";
+      let mappedStatus: UIItemStatus;
+      const mappedCategory = item.type === ItemType.DONATION ? "Doação" : "Venda";
 
       if (item.status === ItemStatus.RESERVED) {
         mappedStatus = "Reservado";
@@ -79,7 +79,7 @@ export async function deleteItem(id: string): Promise<void> {
   await api.delete(`/items/${id}`);
 }
 
-export async function reserveItem(id: string): Promise<Item> {
-  const { data } = await api.post<Item>(`/items/${id}/reserve`);
+export async function createOrder(itemId: string): Promise<unknown> {
+  const { data } = await api.post("/orders", { itemId });
   return data;
 }

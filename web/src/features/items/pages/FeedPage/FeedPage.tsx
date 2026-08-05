@@ -7,7 +7,7 @@ import {
   ItemCard,
   type ItemStatus as UIItemStatus,
 } from "../../../../components/ui/ItemCard/ItemCard";
-import { getAllItems, reserveItem } from "../../../../services/items.service";
+import { getAllItems, createOrder } from "../../../../services/items.service";
 import { useAuth } from "../../../../hooks/useAuth";
 import { Modal } from "../../../../components/ui/Modal/Modal";
 import {
@@ -58,8 +58,8 @@ export function FeedPage() {
     }
 
     try {
-      // Chama a nova rota dedicada de reserva
-      await reserveItem(item.id);
+      // Chama a rota de criação de pedido para reservar/comprar o item
+      await createOrder(item.id);
       
       // Atualiza o estado local para refletir a mudança imediatamente
       setItems(prevItems => 

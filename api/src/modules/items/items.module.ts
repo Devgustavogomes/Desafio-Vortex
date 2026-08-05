@@ -5,7 +5,6 @@ import { GetItemByIdUseCase } from "./application/useCases/GetItemByIdUseCase";
 import { UpdateItemUseCase } from "./application/useCases/UpdateItemUseCase";
 import { DeleteItemUseCase } from "./application/useCases/DeleteItemUseCase";
 import { ListUserItemsUseCase } from "./application/useCases/ListUserItemsUseCase";
-import { ReserveItemUseCase } from "./application/useCases/ReserveItemUseCase";
 import { ItemController } from "./presentation/controllers/ItemController";
 import { createItemRouter } from "./presentation/routes/itemRoutes";
 
@@ -17,7 +16,6 @@ const getItemByIdUseCase = new GetItemByIdUseCase(itemRepository);
 const updateItemUseCase = new UpdateItemUseCase(itemRepository);
 const deleteItemUseCase = new DeleteItemUseCase(itemRepository);
 const listUserItemsUseCase = new ListUserItemsUseCase(itemRepository);
-const reserveItemUseCase = new ReserveItemUseCase(itemRepository);
 
 const itemController = new ItemController(
   createItemUseCase,
@@ -26,7 +24,6 @@ const itemController = new ItemController(
   updateItemUseCase,
   deleteItemUseCase,
   listUserItemsUseCase,
-  reserveItemUseCase,
 );
 
 export const itemRouter = createItemRouter(itemController);

@@ -5,7 +5,7 @@ import { GetItemByIdUseCase } from "../../application/useCases/GetItemByIdUseCas
 import { UpdateItemUseCase } from "../../application/useCases/UpdateItemUseCase";
 import { DeleteItemUseCase } from "../../application/useCases/DeleteItemUseCase";
 import { ListUserItemsUseCase } from "../../application/useCases/ListUserItemsUseCase";
-import { ReserveItemUseCase } from "../../application/useCases/ReserveItemUseCase";
+
 import { Item } from "../../domain/entities/Item";
 
 export class ItemController {
@@ -16,7 +16,6 @@ export class ItemController {
     private updateItemUseCase: UpdateItemUseCase,
     private deleteItemUseCase: DeleteItemUseCase,
     private listUserItemsUseCase: ListUserItemsUseCase,
-    private reserveItemUseCase: ReserveItemUseCase,
   ) {}
 
   private toResponse(item: Item) {
@@ -63,12 +62,6 @@ export class ItemController {
     res.status(200).json(this.toResponse(item));
   };
 
-  reserve = async (req: Request, res: Response): Promise<void> => {
-    const userId = req.userId!;
-    const id = req.params.id as string;
-    const item = await this.reserveItemUseCase.execute(id, userId);
-    res.status(200).json(this.toResponse(item));
-  };
 
   delete = async (req: Request, res: Response): Promise<void> => {
     const userId = req.userId!;
