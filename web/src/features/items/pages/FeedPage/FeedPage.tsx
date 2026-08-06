@@ -19,18 +19,30 @@ import {
 } from "../../../../types/items.types";
 
 type FilterType = "all" | "sale" | "donation";
+type FilterCategory = ItemCategory | "all";
+
+const categoryLabels: Record<ItemCategory, string> = {
+  [ItemCategory.BOOKS]: "Livros",
+  [ItemCategory.ELECTRONICS]: "Eletrônicos",
+  [ItemCategory.SCHOOL_SUPPLIES]: "Material Escolar",
+  [ItemCategory.CLOTHING]: "Vestuário",
+  [ItemCategory.SPORTS]: "Esportes",
+  [ItemCategory.FURNITURE]: "Móveis",
+  [ItemCategory.OTHER]: "Outros",
+};
 
 export function FeedPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-  
+
   const [filter, setFilter] = useState<FilterType>("all");
+  const [categoryFilter, setCategoryFilter] = useState<FilterCategory>("all");
 
   const fetchItems = async () => {
     try {
@@ -59,11 +71,9 @@ export function FeedPage() {
     }
 
     try {
-      // Chama a rota de criação de pedido para reservar/comprar o item
       await createOrder(item.id);
-      
-      // Atualiza o estado local para refletir a mudança imediatamente
-      setItems(prevItems => 
+
+      setItems(prevItems =>
         prevItems.map(i => i.id === item.id ? { ...i, status: ItemStatus.RESERVED } : i)
       );
 
@@ -79,16 +89,6 @@ export function FeedPage() {
         type: "error"
       });
     }
-  };
-
-  const categoryLabels: Record<ItemCategory, string> = {
-    [ItemCategory.BOOKS]: "Livros",
-    [ItemCategory.ELECTRONICS]: "Eletrônicos",
-    [ItemCategory.SCHOOL_SUPPLIES]: "Material Escolar",
-    [ItemCategory.CLOTHING]: "Vestuário",
-    [ItemCategory.SPORTS]: "Esportes",
-    [ItemCategory.FURNITURE]: "Móveis",
-    [ItemCategory.OTHER]: "Outros",
   };
 
   const mapItemToUI = (item: Item) => {
@@ -133,11 +133,17 @@ export function FeedPage() {
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
-      if (filter === "sale") return item.type === ItemType.SALE;
-      if (filter === "donation") return item.type === ItemType.DONATION;
-      return true; // "all"
+      const matchesType =
+        filter === "all" ||
+        (filter === "sale" && item.type === ItemType.SALE) ||
+        (filter === "donation" && item.type === ItemType.DONATION);
+
+      const matchesCategory =
+        categoryFilter === "all" || item.category === categoryFilter;
+
+      return matchesType && matchesCategory;
     });
-  }, [items, filter]);
+  }, [items, filter, categoryFilter]);
 
   if (isLoading) {
     return (
@@ -168,7 +174,6 @@ export function FeedPage() {
 
   return (
     <div className={styles.page}>
-      {/* Toast notification */}
       {toastMessage && (
         <Toast
           message={toastMessage.text}
@@ -203,6 +208,24 @@ export function FeedPage() {
         </button>
       </div>
 
+      <div className={styles.filters}>
+        <button
+          className={`${styles.filterPill} ${categoryFilter === "all" ? styles.filterPillActive : ""}`}
+          onClick={() => setCategoryFilter("all")}
+        >
+          Todas as Categorias
+        </button>
+        {(Object.entries(categoryLabels) as [ItemCategory, string][]).map(([value, label]) => (
+          <button
+            key={value}
+            className={`${styles.filterPill} ${categoryFilter === value ? styles.filterPillActive : ""}`}
+            onClick={() => setCategoryFilter(value)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       <p className={styles.itemCount}>
         Mostrando {filteredItems.length} {filteredItems.length === 1 ? "item" : "itens"}
       </p>
@@ -211,13 +234,19 @@ export function FeedPage() {
         <div className={`${styles.empty} glass`}>
           <h3>Nenhum item encontrado</h3>
           <p>
-            Não há itens disponíveis para esta categoria no momento. 
+            Não há itens disponíveis para este filtro no momento.
             Volte mais tarde ou tente outro filtro.
           </p>
-          {filter !== "all" && (
-             <Button variant="primary" onClick={() => setFilter("all")}>
-                Ver Todos os Itens
-             </Button>
+          {(filter !== "all" || categoryFilter !== "all") && (
+            <Button
+              variant="primary"
+              onClick={() => {
+                setFilter("all");
+                setCategoryFilter("all");
+              }}
+            >
+              Limpar Filtros
+            </Button>
           )}
         </div>
       ) : (
@@ -244,13 +273,13 @@ export function FeedPage() {
       )}
 
       {selectedItem && (
-        <Modal 
-          isOpen={!!selectedItem} 
-          onClose={() => setSelectedItem(null)} 
+        <Modal
+          isOpen={!!selectedItem}
+          onClose={() => setSelectedItem(null)}
           title={selectedItem.name}
           footer={
-            <Button 
-              variant="primary" 
+            <Button
+              variant="primary"
               onClick={() => {
                 handleBuyOrReserve(selectedItem);
                 setSelectedItem(null);
@@ -263,9 +292,9 @@ export function FeedPage() {
           }
         >
           {selectedItem.imageUrl && (
-            <img 
-              src={selectedItem.imageUrl} 
-              alt={selectedItem.name} 
+            <img
+              src={selectedItem.imageUrl}
+              alt={selectedItem.name}
               style={{ width: '100%', maxHeight: '300px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }}
             />
           )}

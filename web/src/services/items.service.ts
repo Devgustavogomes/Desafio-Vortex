@@ -7,6 +7,7 @@ import {
   ItemType,
   ItemCondition,
   ItemStatus,
+  ItemCategory,
 } from "../types/items.types";
 
 export interface ShowcaseItem {
@@ -17,9 +18,16 @@ export interface ShowcaseItem {
   imageUrl?: string;
 }
 
-export async function fetchShowcaseItems(): Promise<ShowcaseItem[]> {
+export async function fetchShowcaseItems(
+  categories?: ItemCategory[],
+): Promise<ShowcaseItem[]> {
   try {
-    const { data } = await api.get<Item[]>("/items");
+    const params: Record<string, string> = {};
+    if (categories && categories.length > 0) {
+      params.category = categories.join(",");
+    }
+
+    const { data } = await api.get<Item[]>("/items", { params });
 
     return data.map((item) => {
       let mappedStatus: UIItemStatus;
@@ -47,8 +55,12 @@ export async function fetchShowcaseItems(): Promise<ShowcaseItem[]> {
   }
 }
 
-export async function getAllItems(): Promise<Item[]> {
-  const { data } = await api.get<Item[]>("/items");
+export async function getAllItems(categories?: ItemCategory[]): Promise<Item[]> {
+  const params: Record<string, string> = {};
+  if (categories && categories.length > 0) {
+    params.category = categories.join(",");
+  }
+  const { data } = await api.get<Item[]>("/items", { params });
   return data;
 }
 

@@ -37,6 +37,44 @@
   justify-content: center;
 }
 
+.categoryFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.categoryPill {
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.categoryPill:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.categoryPillActive {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.categoryPillActive:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+  color: white;
+}
+
 .errorContainer, .emptyContainer {
   grid-column: 1 / -1;
   display: flex;
