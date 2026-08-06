@@ -2,6 +2,7 @@ import { z } from "zod";
 import { ItemType } from "../../domain/enums/ItemType";
 import { ItemStatus } from "../../domain/enums/ItemStatus";
 import { ItemCondition } from "../../domain/enums/ItemCondition";
+import { ItemCategory } from "../../domain/enums/ItemCategory";
 
 // ─── createItemSchema ──────────────────────────────────────────────────────────
 
@@ -12,6 +13,9 @@ export const createItemSchema = z.object({
   type: z.enum(ItemType, { message: "Type must be 'sale' or 'donation'" }),
   condition: z.enum(ItemCondition, {
     message: "Condition must be 'NEW' or 'USED'",
+  }),
+  category: z.enum(ItemCategory, {
+    message: "Invalid category",
   }),
   imageUrl: z.string().url().optional(),
 });
@@ -35,6 +39,7 @@ export const updateItemSchema = z.object({
   condition: z
     .enum(ItemCondition, { message: "Condition must be 'NEW' or 'USED'" })
     .optional(),
+  category: z.enum(ItemCategory, { message: "Invalid category" }).optional(),
   imageUrl: z.string().url().optional(),
 });
 
