@@ -3,6 +3,7 @@ import { Price } from "@/shared/domain/valueObjects/Price";
 import { ItemType } from "../enums/ItemType";
 import { ItemStatus } from "../enums/ItemStatus";
 import { ItemCondition } from "../enums/ItemCondition";
+import { ItemCategory } from "../enums/ItemCategory";
 
 export interface ItemProps {
   name: string;
@@ -10,6 +11,7 @@ export interface ItemProps {
   price: Price;
   type: ItemType;
   condition: ItemCondition;
+  category: ItemCategory;
   owner: string;
   imageUrl?: string;
 }
@@ -22,6 +24,7 @@ export interface RestoreItemProps {
   type: ItemType;
   status: ItemStatus;
   condition: ItemCondition;
+  category: ItemCategory;
   owner: string;
   imageUrl?: string;
 }
@@ -34,6 +37,7 @@ export class Item {
   private _type: ItemType;
   private _status: ItemStatus;
   private _condition: ItemCondition;
+  private _category: ItemCategory;
   private _owner: string;
   private _imageUrl?: string;
 
@@ -45,6 +49,7 @@ export class Item {
     type: ItemType,
     status: ItemStatus,
     condition: ItemCondition,
+    category: ItemCategory,
     owner: string,
     imageUrl?: string,
   ) {
@@ -55,6 +60,7 @@ export class Item {
     this._type = type;
     this._status = status;
     this._condition = condition;
+    this._category = category;
     this._owner = owner;
     this._imageUrl = imageUrl;
   }
@@ -70,6 +76,7 @@ export class Item {
       props.type,
       ItemStatus.AVAILABLE,
       props.condition,
+      props.category,
       props.owner,
       props.imageUrl,
     );
@@ -85,6 +92,7 @@ export class Item {
       props.type,
       props.status,
       props.condition,
+      props.category,
       props.owner,
       props.imageUrl,
     );
@@ -120,6 +128,10 @@ export class Item {
     return this._condition;
   }
 
+  get category(): ItemCategory {
+    return this._category;
+  }
+
   get owner(): string {
     return this._owner;
   }
@@ -148,6 +160,10 @@ export class Item {
 
   set condition(value: ItemCondition) {
     this._condition = value;
+  }
+
+  set category(value: ItemCategory) {
+    this._category = value;
   }
 
   set imageUrl(value: string | undefined) {
