@@ -36,13 +36,13 @@ export function Header() {
       <nav className={`${styles.navigation} ${isMobileMenuOpen ? styles.open : ''}`}>
         <ul className={styles.navLinks}>
           <li>
-            <Link to="/feed" onClick={closeMenu}>Marketplace</Link>
+            <a href="/#vitrine" onClick={closeMenu}>Vitrine</a>
           </li>
           <li>
             <a href="/#sobre" onClick={closeMenu}>Como Funciona</a>
           </li>
           <li>
-            <a href="/#vitrine" onClick={closeMenu}>Vitrine</a>
+            <Link to="/feed" onClick={closeMenu}>Marketplace</Link>
           </li>
           {isAuthenticated && (
             <>
