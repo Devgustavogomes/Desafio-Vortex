@@ -15,6 +15,7 @@ export class CreateItemUseCase {
       price,
       type: input.type,
       condition: input.condition,
+      category: input.category,
       owner: userId,
       imageUrl: input.imageUrl,
     });

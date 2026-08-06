@@ -43,6 +43,10 @@ export class UpdateItemUseCase {
       item.condition = input.condition;
     }
 
+    if (input.category !== undefined) {
+      item.category = input.category;
+    }
+
     if (input.imageUrl !== undefined) {
       item.imageUrl = input.imageUrl;
     }
