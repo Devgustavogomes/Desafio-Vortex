@@ -45,9 +45,14 @@ export function Header() {
             <a href="/#vitrine" onClick={closeMenu}>Vitrine</a>
           </li>
           {isAuthenticated && (
-            <li>
-              <Link to="/my-items" onClick={closeMenu}>Meus Itens</Link>
-            </li>
+            <>
+              <li>
+                <Link to="/my-items" onClick={closeMenu}>Meus Itens</Link>
+              </li>
+              <li>
+                <Link to="/orders" onClick={closeMenu}>Pedidos</Link>
+              </li>
+            </>
           )}
         </ul>
         <div className={styles.actions}>

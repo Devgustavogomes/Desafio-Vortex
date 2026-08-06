@@ -7,6 +7,7 @@ import { MyItemsPage } from "../features/items/pages/MyItemsPage/MyItemsPage";
 import { NewItemPage } from "../features/items/pages/NewItemPage/NewItemPage";
 import { EditItemPage } from "../features/items/pages/EditItemPage/EditItemPage";
 import { FeedPage } from "../features/items/pages/FeedPage/FeedPage";
+import { OrdersPage } from "../features/orders/pages/OrdersPage/OrdersPage";
 
 export function AppRouter() {
   return (
@@ -36,6 +37,14 @@ export function AppRouter() {
         element={
           <ProtectedRoute>
             <EditItemPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/orders"
+        element={
+          <ProtectedRoute>
+            <OrdersPage />
           </ProtectedRoute>
         }
       />
