@@ -39,7 +39,6 @@ export function validateQuery(schema: ZodSchema) {
       return;
     }
 
-    req.query = result.data as Record<string, any>;
     next();
   };
 }
