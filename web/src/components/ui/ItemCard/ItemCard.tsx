@@ -1,7 +1,7 @@
 import styles from './ItemCard.module.css';
 import { Button } from '../Button/Button';
 
-export type ItemStatus = 'Novo' | 'Usado' | 'Doado' | 'Reservado';
+export type ItemStatus = 'Novo' | 'Usado' | 'Doado' | 'Reservado' | 'Vendido';
 
 interface ItemCardProps {
   title: string;
@@ -38,6 +38,7 @@ export function ItemCard({
       case 'Usado': return styles.statusUsed;
       case 'Doado': return styles.statusDonated;
       case 'Reservado': return styles.statusReserved;
+      case 'Vendido': return styles.statusSelled;
       default: return '';
     }
   };
@@ -80,6 +81,15 @@ export function ItemCard({
         
         {hasOwnerActions ? (
           <div className={styles.ownerActions}>
+            {onDetailsClick && (
+              <Button 
+                variant="secondary" 
+                className={styles.actionButton}
+                onClick={onDetailsClick}
+              >
+                Detalhes
+              </Button>
+            )}
             {onEditClick && (
               <Button 
                 variant="secondary" 

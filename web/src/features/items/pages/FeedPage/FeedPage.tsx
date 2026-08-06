@@ -291,16 +291,22 @@ export function FeedPage() {
             </Button>
           }
         >
-          {selectedItem.imageUrl && (
+          {selectedItem.imageUrl ? (
             <img
               src={selectedItem.imageUrl}
               alt={selectedItem.name}
               style={{ width: '100%', maxHeight: '300px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }}
             />
+          ) : (
+            <div style={{ width: '100%', height: '200px', background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', borderRadius: '8px', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
+              <span>Sem imagem</span>
+            </div>
           )}
           <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
             <span style={{ padding: '0.25rem 0.5rem', background: 'var(--color-primary-light)', color: 'white', borderRadius: '4px', fontSize: '0.875rem' }}>
-              {selectedItem.type === ItemType.SALE ? 'À Venda' : 'Para Doação'}
+              {selectedItem.status === ItemStatus.SELLED ? 'Vendido' :
+               selectedItem.status === ItemStatus.RESERVED ? 'Reservado' :
+               selectedItem.type === ItemType.SALE ? 'À Venda' : 'Para Doação'}
             </span>
             <span style={{ padding: '0.25rem 0.5rem', background: 'var(--color-border)', color: 'var(--color-text)', borderRadius: '4px', fontSize: '0.875rem' }}>
               {selectedItem.condition === ItemCondition.NEW ? 'Novo' : 'Usado'}

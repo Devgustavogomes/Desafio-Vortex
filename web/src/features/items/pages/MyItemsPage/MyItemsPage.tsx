@@ -7,7 +7,8 @@ import {
   ItemCard,
   type ItemStatus as UIItemStatus,
 } from "../../../../components/ui/ItemCard/ItemCard";
-import { getUserItems, deleteItem } from "../../../../services/items.service";
+import { Modal } from "../../../../components/ui/Modal/Modal";
+import { getUserItems, deleteItem, getItemById } from "../../../../services/items.service";
 import {
   type Item,
   ItemType,
@@ -23,6 +24,7 @@ export function MyItemsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
   // Read success message passed via navigate state
   useEffect(() => {
@@ -77,6 +79,16 @@ export function MyItemsPage() {
     navigate("/my-items/new");
   };
 
+  const handleDetailsClick = async (id: string) => {
+    try {
+      const fetchedItem = await getItemById(id);
+      setSelectedItem(fetchedItem);
+    } catch (err) {
+      console.error("Erro ao buscar detalhes do item:", err);
+      alert("Não foi possível carregar os dados atualizados do item.");
+    }
+  };
+
   const categoryLabels: Record<ItemCategory, string> = {
     [ItemCategory.BOOKS]: "Livros",
     [ItemCategory.ELECTRONICS]: "Eletrônicos",
@@ -91,7 +103,9 @@ export function MyItemsPage() {
     let mappedStatus: UIItemStatus = "Usado";
     const mappedCategory = categoryLabels[item.category] ?? item.category;
 
-    if (item.status === ItemStatus.RESERVED) {
+    if (item.status === ItemStatus.SELLED) {
+      mappedStatus = "Vendido";
+    } else if (item.status === ItemStatus.RESERVED) {
       mappedStatus = "Reservado";
     } else if (item.type === ItemType.DONATION) {
       mappedStatus = "Doado";
@@ -105,6 +119,7 @@ export function MyItemsPage() {
       category: mappedCategory,
       status: mappedStatus,
       imageUrl: item.imageUrl,
+      isAvailable: item.status === ItemStatus.AVAILABLE,
     };
   };
 
@@ -176,12 +191,52 @@ export function MyItemsPage() {
                 status={uiProps.status}
                 imageUrl={uiProps.imageUrl}
                 description={item.description}
-                onEditClick={() => handleEdit(uiProps.id)}
-                onDeleteClick={() => handleDelete(uiProps.id)}
+                onEditClick={uiProps.isAvailable ? () => handleEdit(uiProps.id) : undefined}
+                onDeleteClick={uiProps.isAvailable ? () => handleDelete(uiProps.id) : undefined}
+                onDetailsClick={() => handleDetailsClick(item.id)}
               />
             );
           })}
         </div>
+      )}
+
+      {selectedItem && (
+        <Modal
+          isOpen={!!selectedItem}
+          onClose={() => setSelectedItem(null)}
+          title={selectedItem.name}
+        >
+          {selectedItem.imageUrl ? (
+            <img
+              src={selectedItem.imageUrl}
+              alt={selectedItem.name}
+              style={{ width: '100%', maxHeight: '300px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }}
+            />
+          ) : (
+            <div style={{ width: '100%', height: '200px', background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', borderRadius: '8px', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
+              <span>Sem imagem</span>
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+            <span style={{ padding: '0.25rem 0.5rem', background: 'var(--color-primary-light)', color: 'white', borderRadius: '4px', fontSize: '0.875rem' }}>
+              {selectedItem.status === ItemStatus.SELLED ? 'Vendido' :
+               selectedItem.status === ItemStatus.RESERVED ? 'Reservado' :
+               selectedItem.type === ItemType.SALE ? 'À Venda' : 'Para Doação'}
+            </span>
+            <span style={{ padding: '0.25rem 0.5rem', background: 'var(--color-border)', color: 'var(--color-text)', borderRadius: '4px', fontSize: '0.875rem' }}>
+              {selectedItem.condition === ItemCondition.NEW ? 'Novo' : 'Usado'}
+            </span>
+            {selectedItem.type === ItemType.SALE && (
+              <span style={{ padding: '0.25rem 0.5rem', background: 'var(--color-surface-hover)', color: 'var(--color-text)', borderRadius: '4px', fontSize: '0.875rem', fontWeight: 'bold' }}>
+                {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedItem.price)}
+              </span>
+            )}
+          </div>
+          <h4 style={{ marginBottom: '0.5rem', fontSize: '1.1rem' }}>Descrição</h4>
+          <p style={{ color: 'var(--color-text-muted)', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
+            {selectedItem.description || "Nenhuma descrição fornecida."}
+          </p>
+        </Modal>
       )}
     </div>
   );
