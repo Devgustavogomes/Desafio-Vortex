@@ -4,17 +4,19 @@ import { authMiddleware } from "../../../../infra/http/middlewares/authMiddlewar
 import {
   validate,
   validateParams,
+  validateQuery,
 } from "../../../../infra/http/middlewares/validateMiddleware";
 import {
   createItemSchema,
   updateItemSchema,
   itemIdParamSchema,
+  listItemsQuerySchema,
 } from "../../application/dtos/ItemDTOs";
 
 export function createItemRouter(itemController: ItemController): Router {
   const router = Router();
 
-  router.get("/items", itemController.listAll);
+  router.get("/items", validateQuery(listItemsQuerySchema), itemController.listAll);
   router.get(
     "/items/me",
     authMiddleware,

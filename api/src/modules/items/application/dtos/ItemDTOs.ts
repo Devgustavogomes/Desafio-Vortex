@@ -52,3 +52,21 @@ export const itemIdParamSchema = z.object({
 });
 
 export type ItemIdParam = z.infer<typeof itemIdParamSchema>;
+
+// ─── listItemsQuerySchema ──────────────────────────────────────────────────────
+
+const validCategories = Object.values(ItemCategory) as [string, ...string[]];
+
+export const listItemsQuerySchema = z.object({
+  category: z
+    .string()
+    .optional()
+    .refine(
+      (val) =>
+        val === undefined ||
+        val.split(",").every((c) => validCategories.includes(c.trim())),
+      { message: `category must be one or more of: ${validCategories.join(", ")}` },
+    ),
+});
+
+export type ListItemsQuery = z.infer<typeof listItemsQuerySchema>;

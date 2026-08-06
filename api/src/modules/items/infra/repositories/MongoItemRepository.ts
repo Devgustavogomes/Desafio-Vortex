@@ -1,4 +1,4 @@
-import { IItemRepository } from "../../domain/repositories/IItemRepository";
+import { IItemRepository, ItemFilters } from "../../domain/repositories/IItemRepository";
 import { Item } from "../../domain/entities/Item";
 import { Price } from "@/shared/domain/valueObjects/Price";
 import { ItemType } from "../../domain/enums/ItemType";
@@ -61,11 +61,16 @@ export class MongoItemRepository implements IItemRepository {
     return doc ? this.toDomain(doc) : null;
   }
 
-  async findAll(): Promise<Item[]> {
-    // RNF: não retornar itens com status "reserved" ou "selled"
-    const docs = await ItemModel.find({
+  async findAll(filters?: ItemFilters): Promise<Item[]> {
+    const query: Record<string, unknown> = {
       status: { $nin: [ItemStatus.RESERVED, ItemStatus.SELLED] },
-    });
+    };
+
+    if (filters?.categories && filters.categories.length > 0) {
+      query.category = { $in: filters.categories };
+    }
+
+    const docs = await ItemModel.find(query);
     return docs.map((doc) => this.toDomain(doc));
   }
 

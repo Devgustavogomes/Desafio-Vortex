@@ -5,7 +5,8 @@ import { GetItemByIdUseCase } from "../../application/useCases/GetItemByIdUseCas
 import { UpdateItemUseCase } from "../../application/useCases/UpdateItemUseCase";
 import { DeleteItemUseCase } from "../../application/useCases/DeleteItemUseCase";
 import { ListUserItemsUseCase } from "../../application/useCases/ListUserItemsUseCase";
-
+import { ItemFilters } from "../../domain/repositories/IItemRepository";
+import { ItemCategory } from "../../domain/enums/ItemCategory";
 import { Item } from "../../domain/entities/Item";
 
 export class ItemController {
@@ -39,8 +40,18 @@ export class ItemController {
     res.status(201).json(this.toResponse(item));
   };
 
-  listAll = async (_req: Request, res: Response): Promise<void> => {
-    const items = await this.listAllItemsUseCase.execute();
+  listAll = async (req: Request, res: Response): Promise<void> => {
+    const filters: ItemFilters = {};
+
+    if (req.query.category) {
+      const raw = req.query.category as string;
+      filters.categories = raw
+        .split(",")
+        .map((c) => c.trim() as ItemCategory)
+        .filter(Boolean);
+    }
+
+    const items = await this.listAllItemsUseCase.execute(filters);
     res.status(200).json(items.map((item) => this.toResponse(item)));
   };
 
