@@ -3,7 +3,9 @@ import { Item } from "../../domain/entities/Item";
 import { Price } from "@/shared/domain/valueObjects/Price";
 import { NotFoundError } from "@/shared/errors/NotFoundError";
 import { ForbiddenError } from "@/shared/errors/ForbiddenError";
+import { ConflictError } from "@/shared/errors/ConflictError";
 import { UpdateItemInput } from "../dtos/ItemDTOs";
+import { ItemStatus } from "../../domain/enums/ItemStatus";
 
 export class UpdateItemUseCase {
   constructor(private readonly repository: IItemRepository) {}
@@ -21,6 +23,14 @@ export class UpdateItemUseCase {
 
     if (item.owner !== userId) {
       throw new ForbiddenError("You are not the owner of this item");
+    }
+
+    if (item.status === ItemStatus.SELLED) {
+      throw new ConflictError("Sold items cannot be updated");
+    }
+
+    if (item.status === ItemStatus.RESERVED) {
+      throw new ConflictError("Reserved items cannot be updated");
     }
 
     if (input.name !== undefined) {
