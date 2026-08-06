@@ -41,6 +41,7 @@ export function EditItemPage() {
         price: data.price,
         type: data.type,
         condition: data.condition,
+        category: data.category,
         status: data.status,
         imageUrl: data.imageUrl,
       });

@@ -19,6 +19,7 @@ export function NewItemPage() {
         price: data.price,
         type: data.type,
         condition: data.condition,
+        category: data.category,
         imageUrl: data.imageUrl,
       });
       navigate("/my-items", {
