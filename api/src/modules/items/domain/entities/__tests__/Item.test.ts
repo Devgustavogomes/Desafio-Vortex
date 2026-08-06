@@ -3,6 +3,7 @@ import { Item } from "../Item";
 import { ItemType } from "../../enums/ItemType";
 import { ItemStatus } from "../../enums/ItemStatus";
 import { ItemCondition } from "../../enums/ItemCondition";
+import { ItemCategory } from "../../enums/ItemCategory";
 import { Price } from "@/shared/domain/valueObjects/Price";
 
 const makeItem = (overrides?: Partial<Parameters<typeof Item.create>[0]>) =>
@@ -12,6 +13,7 @@ const makeItem = (overrides?: Partial<Parameters<typeof Item.create>[0]>) =>
     price: Price.fromFloat(350.0),
     type: ItemType.SALE,
     condition: ItemCondition.USED,
+    category: ItemCategory.FURNITURE,
     owner: "user-abc-123",
     ...overrides,
   });
@@ -45,6 +47,7 @@ describe("Item", () => {
         price,
         type: ItemType.SALE,
         condition: ItemCondition.USED,
+        category: ItemCategory.FURNITURE,
         owner: "user-abc-123",
       });
 
@@ -74,6 +77,7 @@ describe("Item", () => {
         type: ItemType.SALE,
         status: ItemStatus.RESERVED,
         condition: ItemCondition.USED,
+        category: ItemCategory.BOOKS,
         owner: "owner-xyz",
       });
 
@@ -95,6 +99,7 @@ describe("Item", () => {
         type: ItemType.SALE,
         status: ItemStatus.SELLED,
         condition: ItemCondition.USED,
+        category: ItemCategory.OTHER,
         owner: "owner-1",
       });
 
@@ -154,6 +159,7 @@ describe("Item", () => {
         type: ItemType.SALE,
         status: ItemStatus.SELLED,
         condition: ItemCondition.NEW,
+        category: ItemCategory.OTHER,
         owner: "owner-1",
       });
       expect(() => item.reserve()).toThrow();

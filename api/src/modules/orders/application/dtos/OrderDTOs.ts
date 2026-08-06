@@ -4,6 +4,8 @@ export const createOrderSchema = z.object({
   itemId: z.uuid("Invalid UUID format"),
 });
 
+export type CreateOrderInput = z.infer<typeof createOrderSchema>;
+
 export const listOrdersSchema = z.object({
   type: z.enum(["buying", "selling"], {
     message: "Type must be 'buying' or 'selling'",
