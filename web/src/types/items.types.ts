@@ -17,6 +17,17 @@ export const ItemStatus = {
 } as const;
 export type ItemStatus = (typeof ItemStatus)[keyof typeof ItemStatus];
 
+export const ItemCategory = {
+  BOOKS: "books",
+  ELECTRONICS: "electronics",
+  SCHOOL_SUPPLIES: "school_supplies",
+  CLOTHING: "clothing",
+  SPORTS: "sports",
+  FURNITURE: "furniture",
+  OTHER: "other",
+} as const;
+export type ItemCategory = (typeof ItemCategory)[keyof typeof ItemCategory];
+
 export interface Item {
   id: string;
   name: string;
@@ -25,6 +36,7 @@ export interface Item {
   type: ItemType;
   status: ItemStatus;
   condition: ItemCondition;
+  category: ItemCategory;
   owner: string;
   imageUrl?: string;
 }
@@ -35,6 +47,7 @@ export interface CreateItemInput {
   price: number;
   type: ItemType;
   condition: ItemCondition;
+  category: ItemCategory;
   imageUrl?: string;
 }
 
@@ -45,5 +58,6 @@ export interface UpdateItemInput {
   type?: ItemType;
   status?: ItemStatus;
   condition?: ItemCondition;
+  category?: ItemCategory;
   imageUrl?: string;
 }

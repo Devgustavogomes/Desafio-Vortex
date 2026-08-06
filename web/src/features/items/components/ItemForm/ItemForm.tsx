@@ -5,6 +5,7 @@ import {
   ItemType,
   ItemCondition,
   ItemStatus,
+  ItemCategory,
 } from "../../../../types/items.types";
 import styles from "./ItemForm.module.css";
 import { useEffect } from "react";
@@ -16,8 +17,8 @@ const itemFormSchema = z.object({
   price: z.number().positive("O preço deve ser maior que zero"),
   type: z.enum(ItemType, { message: "Tipo inválido" }),
   condition: z.enum(ItemCondition, { message: "Condição inválida" }),
+  category: z.enum(ItemCategory, { message: "Categoria inválida" }),
   status: z.enum(ItemStatus).optional(),
-  // Aligned with backend: z.string().url().optional()
   imageUrl: z
     .string()
     .transform((val) => (val === "" ? undefined : val))
@@ -53,6 +54,7 @@ export function ItemForm({
       price: undefined,
       type: ItemType.SALE,
       condition: ItemCondition.NEW,
+      category: ItemCategory.OTHER,
       imageUrl: "",
       ...initialData,
     },
@@ -67,6 +69,7 @@ export function ItemForm({
         price: initialData.price,
         type: initialData.type || ItemType.SALE,
         condition: initialData.condition || ItemCondition.NEW,
+        category: initialData.category || ItemCategory.OTHER,
         status: initialData.status,
         imageUrl: initialData.imageUrl || "",
       });
@@ -219,6 +222,31 @@ export function ItemForm({
             </span>
           )}
         </div>
+      </div>
+
+      <div className={styles.formGroup}>
+        <label htmlFor="category" className={styles.label}>
+          Categoria <span className={styles.required}>*</span>
+        </label>
+        <select
+          id="category"
+          className={`${styles.input} ${styles.select} ${
+            errors.category ? styles.inputError : ""
+          }`}
+          disabled={isSubmitting}
+          {...register("category")}
+        >
+          <option value={ItemCategory.BOOKS}>📚 Livros</option>
+          <option value={ItemCategory.ELECTRONICS}>💻 Eletrônicos</option>
+          <option value={ItemCategory.SCHOOL_SUPPLIES}>✏️ Material Escolar</option>
+          <option value={ItemCategory.CLOTHING}>👕 Vestuário</option>
+          <option value={ItemCategory.SPORTS}>⚽ Esportes</option>
+          <option value={ItemCategory.FURNITURE}>🪑 Móveis</option>
+          <option value={ItemCategory.OTHER}>📦 Outros</option>
+        </select>
+        {errors.category && (
+          <span className={styles.errorText}>⚠ {errors.category.message}</span>
+        )}
       </div>
 
       {/* ─── Status (edit only) ─────────────────────────── */}

@@ -15,6 +15,7 @@ import {
   ItemType,
   ItemCondition,
   ItemStatus,
+  ItemCategory,
 } from "../../../../types/items.types";
 
 type FilterType = "all" | "sale" | "donation";
@@ -80,9 +81,19 @@ export function FeedPage() {
     }
   };
 
+  const categoryLabels: Record<ItemCategory, string> = {
+    [ItemCategory.BOOKS]: "Livros",
+    [ItemCategory.ELECTRONICS]: "Eletrônicos",
+    [ItemCategory.SCHOOL_SUPPLIES]: "Material Escolar",
+    [ItemCategory.CLOTHING]: "Vestuário",
+    [ItemCategory.SPORTS]: "Esportes",
+    [ItemCategory.FURNITURE]: "Móveis",
+    [ItemCategory.OTHER]: "Outros",
+  };
+
   const mapItemToUI = (item: Item) => {
     let mappedStatus: UIItemStatus = "Usado";
-    let mappedCategory = item.type === ItemType.DONATION ? "Doação" : "Venda";
+    const mappedCategory = categoryLabels[item.category] ?? item.category;
 
     if (item.status === ItemStatus.RESERVED) {
       mappedStatus = "Reservado";
@@ -92,7 +103,6 @@ export function FeedPage() {
       mappedStatus = item.condition === ItemCondition.NEW ? "Novo" : "Usado";
     }
 
-    // Determine the Buy Action state
     let isBuyDisabled = false;
     let buyLabel = "Comprar";
 
