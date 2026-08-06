@@ -27,6 +27,7 @@ export class ItemController {
       type: item.type,
       status: item.status,
       condition: item.condition,
+      category: item.category,
       owner: item.owner,
       imageUrl: item.imageUrl,
     };
