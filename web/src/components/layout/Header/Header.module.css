@@ -1,0 +1,161 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo {
+  height: 32px;
+  width: auto;
+}
+
+.logoContainer h1 {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navLinks {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navLinks a {
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.navLinks a:hover {
+  color: var(--color-primary);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.loginLink {
+  text-decoration: none;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.loginLink:hover {
+  color: var(--color-primary-hover);
+}
+
+.userName {
+  font-weight: 500;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.mobileMenuButton {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 101;
+}
+
+/* ─── Tablet (max 768px) ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  .header {
+    padding: 0.875rem 1.25rem;
+  }
+
+  .mobileMenuButton {
+    display: block;
+  }
+
+  .navigation {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: var(--color-surface);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border-top: 1px solid var(--color-border);
+    gap: 1.5rem;
+  }
+
+  .navigation.open {
+    display: flex;
+  }
+
+  .navLinks {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .navLinks a {
+    font-size: 1.125rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  .actions button {
+    width: 100%;
+  }
+  
+  .userName {
+    display: block;
+  }
+}
+
+/* ─── Mobile (max 480px) ──────────────────────────────────────── */
+@media (max-width: 480px) {
+  .header {
+    padding: 0.75rem 1rem;
+  }
+
+  .logoContainer h1 {
+    font-size: 1rem;
+  }
+}

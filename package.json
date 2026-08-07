@@ -1,0 +1,11 @@
+{
+  "name": "desafio-vortex",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:build": "docker compose build",
+    "docker:logs": "docker compose logs -f"
+  }
+}

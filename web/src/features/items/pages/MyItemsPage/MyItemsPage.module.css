@@ -1,0 +1,110 @@
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  min-height: 60vh;
+}
+
+/* ─── Header ──────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.header h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+/* ─── Grid ────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ─── States: loading / error / empty ────────────────────────── */
+.loading,
+.error,
+.empty {
+  text-align: center;
+  padding: 3rem 2rem;
+  border-radius: 16px;
+  color: var(--color-text-muted);
+  box-shadow: var(--shadow-sm);
+}
+
+.loading p,
+.error p {
+  font-size: 1.05rem;
+}
+
+.empty h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.empty p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* ─── Tablet (max 900px) ──────────────────────────────────────── */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* ─── Mobile (max 640px) ──────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;       /* button takes full width */
+    gap: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .header h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Make the "Adicionar" button full-width on mobile */
+  .header > button,
+  .header > a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .loading,
+  .error,
+  .empty {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .empty h3 {
+    font-size: 1.1rem;
+  }
+}
