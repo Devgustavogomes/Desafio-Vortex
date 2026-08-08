@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../hooks/useAuth';
 import styles from './RegisterPage.module.css';
 
-// ─── Tipos auxiliares ─────────────────────────────────────────────────────────
+
 
 interface ApiError {
   response?: {
@@ -14,7 +14,7 @@ interface ApiError {
   };
 }
 
-// ─── Ícones SVG inline ────────────────────────────────────────────────────────
+
 
 const LeafIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
@@ -48,7 +48,7 @@ const AlertIcon = () => (
   </svg>
 );
 
-// ─── Componente ───────────────────────────────────────────────────────────────
+
 
 export function RegisterPage() {
   const { register } = useAuth();
@@ -61,19 +61,19 @@ export function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ── Handler de submit ───────────────────────────────────────────────────────
+  
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
 
-    // Validação frontend
+    
     if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
       setError('Preencha todos os campos para continuar.');
       return;
     }
 
-    // Validação básica de email
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Insira um e-mail válido.');
@@ -106,23 +106,23 @@ export function RegisterPage() {
     }
   }
 
-  // ── Render ──────────────────────────────────────────────────────────────────
+  
 
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.card}>
-        {/* Logo / Ícone decorativo */}
+        {}
         <div className={styles.logoWrapper}>
           <div className={styles.logoIcon}>
             <LeafIcon />
           </div>
         </div>
 
-        {/* Título */}
+        {}
         <h1 className={styles.title}>Criar Conta</h1>
         <p className={styles.subtitle}>Crie sua conta na plataforma</p>
 
-        {/* Mensagem de erro da API */}
+        {}
         {error && (
           <div className={styles.errorMessage} role="alert">
             <AlertIcon />
@@ -130,9 +130,9 @@ export function RegisterPage() {
           </div>
         )}
 
-        {/* Formulário */}
+        {}
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
-          {/* Campo: Nome */}
+          {}
           <div className={styles.inputGroup}>
             <label htmlFor="register-name" className={styles.label}>
               Nome completo
@@ -153,7 +153,7 @@ export function RegisterPage() {
             </div>
           </div>
 
-          {/* Campo: E-mail */}
+          {}
           <div className={styles.inputGroup}>
             <label htmlFor="register-email" className={styles.label}>
               E-mail
@@ -174,7 +174,7 @@ export function RegisterPage() {
             </div>
           </div>
 
-          {/* Campo: Senha */}
+          {}
           <div className={styles.inputGroup}>
             <label htmlFor="register-password" className={styles.label}>
               Senha
@@ -195,7 +195,7 @@ export function RegisterPage() {
             </div>
           </div>
 
-          {/* Campo: Confirmar Senha */}
+          {}
           <div className={styles.inputGroup}>
             <label htmlFor="register-confirm-password" className={styles.label}>
               Confirmar senha
@@ -216,7 +216,7 @@ export function RegisterPage() {
             </div>
           </div>
 
-          {/* Botão submit */}
+          {}
           <button
             type="submit"
             className={styles.submitButton}
@@ -234,7 +234,7 @@ export function RegisterPage() {
           </button>
         </form>
 
-        {/* Link para login */}
+        {}
         <p className={styles.loginLink}>
           Já tem conta?{' '}
           <Link to="/login">Entrar</Link>

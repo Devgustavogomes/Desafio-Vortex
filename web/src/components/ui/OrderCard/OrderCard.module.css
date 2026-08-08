@@ -40,7 +40,7 @@
 
 .statusWaiting {
   background-color: rgba(245, 158, 11, 0.1);
-  color: #D97706; /* Amber 600 */
+  color: #D97706; 
 }
 
 .statusAccepted {
@@ -112,7 +112,7 @@
 
 .acceptButton, .rejectButton {
   flex: 1;
-  min-height: 44px; /* Touch target minimum */
+  min-height: 44px; 
 }
 
 .acceptButton {
@@ -120,7 +120,7 @@
 }
 
 .acceptButton:hover {
-  background-color: #059669; /* Emerald 600 */
+  background-color: #059669; 
 }
 
 .rejectButton {
@@ -144,7 +144,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-2);
-    order: 2; /* Put badge on the right side if needed, or keep order */
+    order: 2; 
   }
 
   .content {

@@ -1,4 +1,4 @@
-/* ─── Page Wrapper ────────────────────────────────────────────── */
+
 .page {
   width: 100%;
   max-width: 1200px;
@@ -7,7 +7,7 @@
   min-height: 60vh;
 }
 
-/* ─── Header ──────────────────────────────────────────────────── */
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -24,7 +24,7 @@
   line-height: 1.2;
 }
 
-/* ─── Tabs ────────────────────────────────────────────────────── */
+
 .tabs {
   display: flex;
   gap: 0.25rem;
@@ -65,7 +65,7 @@
   border-radius: 2px 2px 0 0;
 }
 
-/* ─── Content area transition ─────────────────────────────────── */
+
 .loading,
 .error,
 .empty,
@@ -78,14 +78,14 @@
   to   { opacity: 1; }
 }
 
-/* ─── Grid ────────────────────────────────────────────────────── */
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
-/* ─── States: loading / error / empty ────────────────────────── */
+
 .loading,
 .error,
 .empty {
@@ -117,7 +117,7 @@
   line-height: 1.6;
 }
 
-/* ─── Toast ───────────────────────────────────────────────────── */
+
 .toastWrapper {
   position: fixed;
   bottom: 2rem;
@@ -125,7 +125,7 @@
   z-index: 9999;
 }
 
-/* ─── Tablet (max 900px) ──────────────────────────────────────── */
+
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
@@ -133,7 +133,7 @@
   }
 }
 
-/* ─── Mobile (max 640px) ──────────────────────────────────────── */
+
 @media (max-width: 640px) {
   .page {
     padding: 1.25rem 1rem 3rem;

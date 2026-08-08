@@ -10,7 +10,7 @@ const REFRESH_COOKIE_OPTIONS = {
   secure: env.NODE_ENV === "production",
   sameSite: "strict" as const,
   path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias em ms
+  maxAge: 7 * 24 * 60 * 60 * 1000, 
 };
 
 export class AuthController {

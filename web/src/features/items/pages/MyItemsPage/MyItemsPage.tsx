@@ -8,7 +8,11 @@ import {
   type ItemStatus as UIItemStatus,
 } from "../../../../components/ui/ItemCard/ItemCard";
 import { Modal } from "../../../../components/ui/Modal/Modal";
-import { getUserItems, deleteItem, getItemById } from "../../../../services/items.service";
+import {
+  getUserItems,
+  deleteItem,
+  getItemById,
+} from "../../../../services/items.service";
 import { Pagination } from "../../../../components/ui/Pagination/Pagination";
 import {
   type Item,
@@ -41,12 +45,12 @@ export function MyItemsPage() {
   };
   const [totalPages, setTotalPages] = useState(1);
 
-  // Read success message passed via navigate state
+  
   useEffect(() => {
     const state = location.state as { successMessage?: string } | null;
     if (state?.successMessage) {
       setToastMessage(state.successMessage);
-      // Clear the navigate state to prevent showing again on refresh
+      
       window.history.replaceState({}, document.title);
     }
   }, [location.state]);
@@ -70,7 +74,7 @@ export function MyItemsPage() {
 
   useEffect(() => {
     fetchItems(page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [page]);
 
   const handleEdit = (id: string) => {
@@ -157,7 +161,7 @@ export function MyItemsPage() {
           <p>{error}</p>
           <Button
             variant="primary"
-            onClick={fetchItems}
+            onClick={() => fetchItems()}
             style={{ marginTop: "1rem" }}
           >
             Tentar novamente
@@ -169,7 +173,7 @@ export function MyItemsPage() {
 
   return (
     <div className={styles.page}>
-      {/* Toast notification */}
+      {}
       {toastMessage && (
         <Toast
           message={toastMessage}
@@ -208,8 +212,14 @@ export function MyItemsPage() {
                 status={uiProps.status}
                 imageUrl={uiProps.imageUrl}
                 description={item.description}
-                onEditClick={uiProps.isAvailable ? () => handleEdit(uiProps.id) : undefined}
-                onDeleteClick={uiProps.isAvailable ? () => handleDelete(uiProps.id) : undefined}
+                onEditClick={
+                  uiProps.isAvailable ? () => handleEdit(uiProps.id) : undefined
+                }
+                onDeleteClick={
+                  uiProps.isAvailable
+                    ? () => handleDelete(uiProps.id)
+                    : undefined
+                }
                 onDetailsClick={() => handleDetailsClick(item.id)}
               />
             );
@@ -217,11 +227,7 @@ export function MyItemsPage() {
         </div>
       )}
 
-      <Pagination
-        page={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
       {selectedItem && (
         <Modal
@@ -233,30 +239,88 @@ export function MyItemsPage() {
             <img
               src={selectedItem.imageUrl}
               alt={selectedItem.name}
-              style={{ width: '100%', maxHeight: '300px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }}
+              style={{
+                width: "100%",
+                maxHeight: "300px",
+                objectFit: "cover",
+                borderRadius: "8px",
+                marginBottom: "1rem",
+              }}
             />
           ) : (
-            <div style={{ width: '100%', height: '200px', background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', borderRadius: '8px', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
+            <div
+              style={{
+                width: "100%",
+                height: "200px",
+                background: "linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)",
+                borderRadius: "8px",
+                marginBottom: "1rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "var(--color-text-muted)",
+              }}
+            >
               <span>Sem imagem</span>
             </div>
           )}
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-            <span style={{ padding: '0.25rem 0.5rem', background: 'var(--color-primary-light)', color: 'white', borderRadius: '4px', fontSize: '0.875rem' }}>
-              {selectedItem.status === ItemStatus.SELLED ? 'Vendido' :
-               selectedItem.status === ItemStatus.RESERVED ? 'Reservado' :
-               selectedItem.type === ItemType.SALE ? 'À Venda' : 'Para Doação'}
+          <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
+            <span
+              style={{
+                padding: "0.25rem 0.5rem",
+                background: "var(--color-primary-light)",
+                color: "white",
+                borderRadius: "4px",
+                fontSize: "0.875rem",
+              }}
+            >
+              {selectedItem.status === ItemStatus.SELLED
+                ? "Vendido"
+                : selectedItem.status === ItemStatus.RESERVED
+                  ? "Reservado"
+                  : selectedItem.type === ItemType.SALE
+                    ? "À Venda"
+                    : "Para Doação"}
             </span>
-            <span style={{ padding: '0.25rem 0.5rem', background: 'var(--color-border)', color: 'var(--color-text)', borderRadius: '4px', fontSize: '0.875rem' }}>
-              {selectedItem.condition === ItemCondition.NEW ? 'Novo' : 'Usado'}
+            <span
+              style={{
+                padding: "0.25rem 0.5rem",
+                background: "var(--color-border)",
+                color: "var(--color-text)",
+                borderRadius: "4px",
+                fontSize: "0.875rem",
+              }}
+            >
+              {selectedItem.condition === ItemCondition.NEW ? "Novo" : "Usado"}
             </span>
             {selectedItem.type === ItemType.SALE && (
-              <span style={{ padding: '0.25rem 0.5rem', background: 'var(--color-surface-hover)', color: 'var(--color-text)', borderRadius: '4px', fontSize: '0.875rem', fontWeight: 'bold' }}>
-                {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedItem.price)}
+              <span
+                style={{
+                  padding: "0.25rem 0.5rem",
+                  background: "var(--color-surface-hover)",
+                  color: "var(--color-text)",
+                  borderRadius: "4px",
+                  fontSize: "0.875rem",
+                  fontWeight: "bold",
+                }}
+              >
+                {new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(selectedItem.price)}
               </span>
             )}
           </div>
-          <h4 style={{ marginBottom: '0.5rem', fontSize: '1.1rem' }}>Descrição</h4>
-          <p style={{ color: 'var(--color-text-muted)', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
+          <h4 style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}>
+            Descrição
+          </h4>
+          <p
+            style={{
+              color: "var(--color-text-muted)",
+              lineHeight: "1.6",
+              whiteSpace: "pre-wrap",
+            }}
+          >
             {selectedItem.description || "Nenhuma descrição fornecida."}
           </p>
         </Modal>

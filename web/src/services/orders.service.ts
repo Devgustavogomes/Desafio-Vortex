@@ -3,10 +3,7 @@ import { type Order } from "../types/orders.types";
 import { type PaginatedResponse } from "../types/pagination.types";
 
 export const ordersService = {
-  /**
-   * Obtém a lista de pedidos baseada no tipo (compras ou vendas).
-   * @param type "buying" para Minhas Compras, "selling" para Minhas Vendas
-   */
+  
   async getOrders(
     type: "buying" | "selling",
     page: number = 1,
@@ -18,11 +15,7 @@ export const ordersService = {
     return data;
   },
 
-  /**
-   * Atualiza o status de um pedido (aceitar ou rejeitar).
-   * @param orderId ID do pedido
-   * @param action Ação a ser tomada ("accept" ou "reject")
-   */
+  
   async updateOrderStatus(
     orderId: string,
     action: "accept" | "reject",

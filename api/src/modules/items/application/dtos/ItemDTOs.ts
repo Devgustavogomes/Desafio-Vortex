@@ -4,7 +4,7 @@ import { ItemStatus } from "../../domain/enums/ItemStatus";
 import { ItemCondition } from "../../domain/enums/ItemCondition";
 import { ItemCategory } from "../../domain/enums/ItemCategory";
 
-// ─── createItemSchema ──────────────────────────────────────────────────────────
+
 
 export const createItemSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -22,7 +22,7 @@ export const createItemSchema = z.object({
 
 export type CreateItemInput = z.infer<typeof createItemSchema>;
 
-// ─── updateItemSchema ──────────────────────────────────────────────────────────
+
 
 export const updateItemSchema = z.object({
   name: z.string().min(1, "Name must not be empty").optional(),
@@ -45,7 +45,7 @@ export const updateItemSchema = z.object({
 
 export type UpdateItemInput = z.infer<typeof updateItemSchema>;
 
-// ─── itemIdParamSchema ─────────────────────────────────────────────────────────
+
 
 export const itemIdParamSchema = z.object({
   id: z.uuid("Invalid UUID format"),
@@ -53,7 +53,7 @@ export const itemIdParamSchema = z.object({
 
 export type ItemIdParam = z.infer<typeof itemIdParamSchema>;
 
-// ─── listItemsQuerySchema ──────────────────────────────────────────────────────
+
 
 export const listItemsQuerySchema = z.object({
   category: z.enum(ItemCategory, { message: "Invalid category" }).optional(),

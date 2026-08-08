@@ -19,12 +19,12 @@ export function Toast({
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Trigger enter animation on mount
+    
     const enterTimer = setTimeout(() => setVisible(true), 10);
-    // Auto-dismiss after duration
+    
     const exitTimer = setTimeout(() => {
       setVisible(false);
-      setTimeout(() => onClose?.(), 300); // wait for exit animation
+      setTimeout(() => onClose?.(), 300); 
     }, duration);
 
     return () => {

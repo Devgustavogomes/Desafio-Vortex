@@ -9,7 +9,7 @@ import { ItemModel, IItemDocument } from "../models/ItemModel";
 import { PaginationOptions, PaginatedResult } from "@/shared/domain/types/PaginatedResult";
 
 export class MongoItemRepository implements IItemRepository {
-  /** Converte documento Mongoose → entidade de domínio */
+  
   private toDomain(doc: IItemDocument): Item {
     return Item.restore({
       id: doc._id,
@@ -25,7 +25,7 @@ export class MongoItemRepository implements IItemRepository {
     });
   }
 
-  /** Converte entidade de domínio → plain object para persistência */
+  
   private toPersistence(item: Item): {
     _id: string;
     name: string;

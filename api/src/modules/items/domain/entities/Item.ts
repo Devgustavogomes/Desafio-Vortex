@@ -65,8 +65,7 @@ export class Item {
     this._imageUrl = imageUrl;
   }
 
-  /** Factory method para criação de um novo item.
-   * Gera um ID automático e define o status inicial como `available`. */
+  
   static create(props: ItemProps): Item {
     return new Item(
       randomUUID(),
@@ -82,7 +81,7 @@ export class Item {
     );
   }
 
-  /** Factory method para reconstituir um item existente (ex.: vindo do banco de dados). */
+  
   static restore(props: RestoreItemProps): Item {
     return new Item(
       props.id,
@@ -98,7 +97,7 @@ export class Item {
     );
   }
 
-  // ─── Getters ────────────────────────────────────────────────────────────────
+  
 
   get id(): string {
     return this._id;
@@ -140,7 +139,7 @@ export class Item {
     return this._imageUrl;
   }
 
-  // ─── Setters ────────────────────────────────────────────────────────────────
+  
 
   set name(value: string) {
     this._name = value;
@@ -170,9 +169,9 @@ export class Item {
     this._imageUrl = value;
   }
 
-  // ─── Métodos de domínio ──────────────────────────────────────────────────────
+  
 
-  /** Reserva o item. Só é permitido quando o status é `available`. */
+  
   reserve(): void {
     if (this._status !== ItemStatus.AVAILABLE) {
       throw new Error(
@@ -182,7 +181,7 @@ export class Item {
     this._status = ItemStatus.RESERVED;
   }
 
-  /** Marca o item como vendido. Só é permitido quando o status é `reserved`. */
+  
   sell(): void {
     if (this._status !== ItemStatus.RESERVED) {
       throw new Error(
@@ -192,7 +191,7 @@ export class Item {
     this._status = ItemStatus.SELLED;
   }
 
-  /** Marca o item como disponível. Só é permitido quando o status é `reserved`. */
+  
   markAsAvailable(): void {
     if (this._status !== ItemStatus.RESERVED) {
       throw new Error(

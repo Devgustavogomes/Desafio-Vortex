@@ -7,7 +7,7 @@ import { AppRouter } from './routes/AppRouter';
 function App() {
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
-      // Previne o prompt padrão de aparecer imediatamente
+      
       e.preventDefault();
       console.log('App está pronto para ser instalado (PWA). Evento salvo.', e);
     };

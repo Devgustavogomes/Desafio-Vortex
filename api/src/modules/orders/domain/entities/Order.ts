@@ -47,8 +47,7 @@ export class Order {
     this._type = type;
   }
 
-  /** Factory method para criação de um novo pedido.
-   * Gera um ID automático e define o status inicial obrigatoriamente como `waiting`. */
+  
   static create(props: OrderProps): Order {
     return new Order(
       randomUUID(),
@@ -61,7 +60,7 @@ export class Order {
     );
   }
 
-  /** Factory method para reconstituir um pedido existente (ex.: vindo do banco de dados). */
+  
   static restore(props: RestoreOrderProps): Order {
     return new Order(
       props.id,
@@ -74,7 +73,7 @@ export class Order {
     );
   }
 
-  // ─── Getters ────────────────────────────────────────────────────────────────
+  
 
   get id(): string {
     return this._id;
@@ -104,9 +103,9 @@ export class Order {
     return this._type;
   }
 
-  // ─── Métodos de domínio ──────────────────────────────────────────────────────
+  
 
-  /** Aceita o pedido. Só é permitido quando o status é `waiting`. */
+  
   accept(): void {
     if (this._status !== OrderStatus.WAITING) {
       throw new Error(
@@ -116,7 +115,7 @@ export class Order {
     this._status = OrderStatus.ACCEPTED;
   }
 
-  /** Rejeita o pedido. Só é permitido quando o status é `waiting`. */
+  
   reject(): void {
     if (this._status !== OrderStatus.WAITING) {
       throw new Error(

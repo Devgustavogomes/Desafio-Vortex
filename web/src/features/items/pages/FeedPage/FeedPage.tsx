@@ -81,7 +81,7 @@ export function FeedPage() {
 
   useEffect(() => {
     fetchItems(page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [page, categoryFilter]);
 
   const handleBuyOrReserve = async (item: Item) => {
@@ -189,7 +189,7 @@ export function FeedPage() {
           <p>{error}</p>
           <Button
             variant="primary"
-            onClick={fetchItems}
+            onClick={() => fetchItems()}
             style={{ marginTop: "1rem" }}
           >
             Tentar novamente

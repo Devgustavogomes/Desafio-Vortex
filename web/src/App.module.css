@@ -6,7 +6,7 @@
   overflow-x: hidden;
 }
 
-/* Faz o conteúdo das páginas (filho direto do flex, via Routes) crescer e ocupar toda a largura */
+
 .appContainer > * {
   width: 100%;
 }

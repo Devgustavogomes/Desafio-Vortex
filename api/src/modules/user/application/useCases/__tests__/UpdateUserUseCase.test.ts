@@ -63,7 +63,7 @@ describe("UpdateUserUseCase", () => {
     const input = { email: "new@example.com" };
 
     mockUserRepository.findById.mockResolvedValue(mockUser);
-    mockUserRepository.findByEmail.mockResolvedValue(null); // No one else has this email
+    mockUserRepository.findByEmail.mockResolvedValue(null); 
     mockUserRepository.update.mockResolvedValue(mockUser);
 
     await updateUserUseCase.execute(userId, input);
@@ -107,7 +107,7 @@ describe("UpdateUserUseCase", () => {
     const mockUser = getMockUser(userId, "old@example.com");
     const input = { email: "new@example.com" };
 
-    // Another user with the same email
+    
     const otherUser = getMockUser("other-id", "new@example.com");
 
     mockUserRepository.findById.mockResolvedValue(mockUser);
@@ -123,10 +123,10 @@ describe("UpdateUserUseCase", () => {
   it("should not throw ConflictError if email is the same as the user's own email", async () => {
     const userId = "user-id-123";
     const mockUser = getMockUser(userId, "old@example.com");
-    const input = { email: "old@example.com" }; // updating to the same email
+    const input = { email: "old@example.com" }; 
 
     mockUserRepository.findById.mockResolvedValue(mockUser);
-    // findByEmail returns the same user (ids match)
+    
     mockUserRepository.findByEmail.mockResolvedValue(mockUser);
     mockUserRepository.update.mockResolvedValue(mockUser);
 
@@ -143,7 +143,7 @@ describe("UpdateUserUseCase", () => {
     const input = { name: "New Name" };
 
     mockUserRepository.findById.mockResolvedValue(mockUser);
-    mockUserRepository.update.mockResolvedValue(null); // Simulate failure during save
+    mockUserRepository.update.mockResolvedValue(null); 
 
     await expect(updateUserUseCase.execute(userId, input)).rejects.toThrow(
       NotFoundError,
