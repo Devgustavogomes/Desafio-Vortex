@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./FeedPage.module.css";
 import { Button } from "../../../../components/ui/Button/Button";
 import { Toast } from "../../../../components/ui/Toast/Toast";
@@ -10,6 +10,7 @@ import {
 import { getAllItems, createOrder } from "../../../../services/items.service";
 import { useAuth } from "../../../../hooks/useAuth";
 import { Modal } from "../../../../components/ui/Modal/Modal";
+import { Pagination } from "../../../../components/ui/Pagination/Pagination";
 import {
   type Item,
   ItemType,
@@ -40,16 +41,34 @@ export function FeedPage() {
   const [error, setError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+
+  const setPage = (newPage: number) => {
+    setSearchParams((prev) => {
+      if (newPage === 1) {
+        prev.delete("page");
+      } else {
+        prev.set("page", String(newPage));
+      }
+      return prev;
+    });
+  };
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
   const [filter, setFilter] = useState<FilterType>("all");
   const [categoryFilter, setCategoryFilter] = useState<FilterCategory>("all");
 
-  const fetchItems = async () => {
+  const fetchItems = async (targetPage = page) => {
     try {
       setIsLoading(true);
       setError(null);
-      const data = await getAllItems();
-      setItems(data);
+      const category = categoryFilter !== "all" ? (categoryFilter as ItemCategory) : undefined;
+      const result = await getAllItems(category, targetPage);
+      setItems(result.data);
+      setTotalPages(result.meta.totalPages);
+      setTotalItems(result.meta.total);
     } catch (err) {
       console.error("Erro ao buscar os itens do feed:", err);
       setError(
@@ -61,8 +80,9 @@ export function FeedPage() {
   };
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    fetchItems(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, categoryFilter]);
 
   const handleBuyOrReserve = async (item: Item) => {
     if (!user) {
@@ -95,10 +115,12 @@ export function FeedPage() {
     let mappedStatus: UIItemStatus = "Usado";
     const mappedCategory = categoryLabels[item.category] ?? item.category;
 
-    if (item.status === ItemStatus.RESERVED) {
+    if (item.status === ItemStatus.SELLED) {
+      mappedStatus = item.type === ItemType.DONATION ? "Doado" : "Vendido";
+    } else if (item.status === ItemStatus.RESERVED) {
       mappedStatus = "Reservado";
     } else if (item.type === ItemType.DONATION) {
-      mappedStatus = "Doado";
+      mappedStatus = "Doação";
     } else {
       mappedStatus = item.condition === ItemCondition.NEW ? "Novo" : "Usado";
     }
@@ -137,13 +159,18 @@ export function FeedPage() {
         filter === "all" ||
         (filter === "sale" && item.type === ItemType.SALE) ||
         (filter === "donation" && item.type === ItemType.DONATION);
-
-      const matchesCategory =
-        categoryFilter === "all" || item.category === categoryFilter;
-
-      return matchesType && matchesCategory;
+      return matchesType;
     });
-  }, [items, filter, categoryFilter]);
+  }, [items, filter]);
+
+  const handleFilterChange = (newFilter: FilterType) => {
+    setFilter(newFilter);
+  };
+
+  const handleCategoryChange = (newCategory: FilterCategory) => {
+    setCategoryFilter(newCategory);
+    setPage(1);
+  };
 
   if (isLoading) {
     return (
@@ -190,19 +217,19 @@ export function FeedPage() {
       <div className={styles.filters}>
         <button
           className={`${styles.filterPill} ${filter === "all" ? styles.filterPillActive : ""}`}
-          onClick={() => setFilter("all")}
+          onClick={() => handleFilterChange("all")}
         >
           Todos os Itens
         </button>
         <button
           className={`${styles.filterPill} ${filter === "sale" ? styles.filterPillActive : ""}`}
-          onClick={() => setFilter("sale")}
+          onClick={() => handleFilterChange("sale")}
         >
           À Venda
         </button>
         <button
           className={`${styles.filterPill} ${filter === "donation" ? styles.filterPillActive : ""}`}
-          onClick={() => setFilter("donation")}
+          onClick={() => handleFilterChange("donation")}
         >
           Para Doação
         </button>
@@ -211,7 +238,7 @@ export function FeedPage() {
       <div className={styles.filters}>
         <button
           className={`${styles.filterPill} ${categoryFilter === "all" ? styles.filterPillActive : ""}`}
-          onClick={() => setCategoryFilter("all")}
+          onClick={() => handleCategoryChange("all")}
         >
           Todas as Categorias
         </button>
@@ -219,7 +246,7 @@ export function FeedPage() {
           <button
             key={value}
             className={`${styles.filterPill} ${categoryFilter === value ? styles.filterPillActive : ""}`}
-            onClick={() => setCategoryFilter(value)}
+            onClick={() => handleCategoryChange(value)}
           >
             {label}
           </button>
@@ -227,7 +254,7 @@ export function FeedPage() {
       </div>
 
       <p className={styles.itemCount}>
-        Mostrando {filteredItems.length} {filteredItems.length === 1 ? "item" : "itens"}
+        {totalItems} {totalItems === 1 ? "item" : "itens"} no total
       </p>
 
       {filteredItems.length === 0 ? (
@@ -243,6 +270,7 @@ export function FeedPage() {
               onClick={() => {
                 setFilter("all");
                 setCategoryFilter("all");
+                setPage(1);
               }}
             >
               Limpar Filtros
@@ -271,6 +299,12 @@ export function FeedPage() {
           })}
         </div>
       )}
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
 
       {selectedItem && (
         <Modal

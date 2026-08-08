@@ -47,7 +47,7 @@ export function NewItemPage() {
         <h1 className={styles.title}>Novo Anúncio</h1>
         <p className={styles.subtitle}>
           Preencha os dados do item que deseja vender ou doar para a comunidade
-          da UNIFOR.
+          da Unifor.
         </p>
       </div>
 

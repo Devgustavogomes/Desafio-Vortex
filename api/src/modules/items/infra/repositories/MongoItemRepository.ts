@@ -6,6 +6,7 @@ import { ItemStatus } from "../../domain/enums/ItemStatus";
 import { ItemCondition } from "../../domain/enums/ItemCondition";
 import { ItemCategory } from "../../domain/enums/ItemCategory";
 import { ItemModel, IItemDocument } from "../models/ItemModel";
+import { PaginationOptions, PaginatedResult } from "@/shared/domain/types/PaginatedResult";
 
 export class MongoItemRepository implements IItemRepository {
   /** Converte documento Mongoose → entidade de domínio */
@@ -61,22 +62,48 @@ export class MongoItemRepository implements IItemRepository {
     return doc ? this.toDomain(doc) : null;
   }
 
-  async findAll(filters?: ItemFilters): Promise<Item[]> {
+  async findAllPaginated(
+    filters: ItemFilters | undefined,
+    pagination: PaginationOptions,
+  ): Promise<PaginatedResult<Item>> {
     const query: Record<string, unknown> = {
       status: { $nin: [ItemStatus.RESERVED, ItemStatus.SELLED] },
     };
-
-    if (filters?.categories && filters.categories.length > 0) {
-      query.category = { $in: filters.categories };
+    if (filters?.category) {
+      query.category = filters.category;
     }
 
-    const docs = await ItemModel.find(query);
-    return docs.map((doc) => this.toDomain(doc));
+    const { page, limit } = pagination;
+    const skip = (page - 1) * limit;
+
+    const [docs, total] = await Promise.all([
+      ItemModel.find(query).sort({ _id: -1 }).skip(skip).limit(limit),
+      ItemModel.countDocuments(query),
+    ]);
+
+    return {
+      data: docs.map((doc) => this.toDomain(doc)),
+      meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    };
   }
 
-  async findByOwner(ownerId: string): Promise<Item[]> {
-    const docs = await ItemModel.find({ owner: ownerId });
-    return docs.map((doc) => this.toDomain(doc));
+  async findByOwnerPaginated(
+    ownerId: string,
+    pagination: PaginationOptions,
+  ): Promise<PaginatedResult<Item>> {
+    const query = { owner: ownerId };
+    const { page, limit } = pagination;
+    const skip = (page - 1) * limit;
+
+    const [docs, total] = await Promise.all([
+      ItemModel.find(query).sort({ _id: -1 }).skip(skip).limit(limit),
+      ItemModel.countDocuments(query),
+    ]);
+
+    return {
+      data: docs.map((doc) => this.toDomain(doc)),
+      meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    };
   }
 
   async update(id: string, item: Item): Promise<Item | null> {

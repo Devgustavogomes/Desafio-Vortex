@@ -20,6 +20,7 @@ export function createItemRouter(itemController: ItemController): Router {
   router.get(
     "/items/me",
     authMiddleware,
+    validateQuery(listItemsQuerySchema),
     itemController.listUserItems,
   );
   router.get(

@@ -55,18 +55,10 @@ export type ItemIdParam = z.infer<typeof itemIdParamSchema>;
 
 // ─── listItemsQuerySchema ──────────────────────────────────────────────────────
 
-const validCategories = Object.values(ItemCategory) as [string, ...string[]];
-
 export const listItemsQuerySchema = z.object({
-  category: z
-    .string()
-    .optional()
-    .refine(
-      (val) =>
-        val === undefined ||
-        val.split(",").every((c) => validCategories.includes(c.trim())),
-      { message: `category must be one or more of: ${validCategories.join(", ")}` },
-    ),
+  category: z.enum(ItemCategory, { message: "Invalid category" }).optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(50).default(12),
 });
 
 export type ListItemsQuery = z.infer<typeof listItemsQuerySchema>;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import styles from "./MyItemsPage.module.css";
 import { Button } from "../../../../components/ui/Button/Button";
 import { Toast } from "../../../../components/ui/Toast/Toast";
@@ -9,6 +9,7 @@ import {
 } from "../../../../components/ui/ItemCard/ItemCard";
 import { Modal } from "../../../../components/ui/Modal/Modal";
 import { getUserItems, deleteItem, getItemById } from "../../../../services/items.service";
+import { Pagination } from "../../../../components/ui/Pagination/Pagination";
 import {
   type Item,
   ItemType,
@@ -25,6 +26,20 @@ export function MyItemsPage() {
   const [error, setError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+
+  const setPage = (newPage: number) => {
+    setSearchParams((prev) => {
+      if (newPage === 1) {
+        prev.delete("page");
+      } else {
+        prev.set("page", String(newPage));
+      }
+      return prev;
+    });
+  };
+  const [totalPages, setTotalPages] = useState(1);
 
   // Read success message passed via navigate state
   useEffect(() => {
@@ -36,12 +51,13 @@ export function MyItemsPage() {
     }
   }, [location.state]);
 
-  const fetchItems = async () => {
+  const fetchItems = async (targetPage = page) => {
     try {
       setIsLoading(true);
       setError(null);
-      const data = await getUserItems();
-      setItems(data);
+      const result = await getUserItems(targetPage);
+      setItems(result.data);
+      setTotalPages(result.meta.totalPages);
     } catch (err) {
       console.error("Erro ao buscar os itens do usuário:", err);
       setError(
@@ -53,8 +69,9 @@ export function MyItemsPage() {
   };
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    fetchItems(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   const handleEdit = (id: string) => {
     navigate(`/my-items/edit/${id}`);
@@ -104,11 +121,11 @@ export function MyItemsPage() {
     const mappedCategory = categoryLabels[item.category] ?? item.category;
 
     if (item.status === ItemStatus.SELLED) {
-      mappedStatus = "Vendido";
+      mappedStatus = item.type === ItemType.DONATION ? "Doado" : "Vendido";
     } else if (item.status === ItemStatus.RESERVED) {
       mappedStatus = "Reservado";
     } else if (item.type === ItemType.DONATION) {
-      mappedStatus = "Doado";
+      mappedStatus = "Doação";
     } else {
       mappedStatus = item.condition === ItemCondition.NEW ? "Novo" : "Usado";
     }
@@ -173,7 +190,7 @@ export function MyItemsPage() {
           <h3>Você ainda não possui itens cadastrados</h3>
           <p>
             Comece a compartilhar ou vender seus materiais com a comunidade da
-            UNIFOR.
+            Unifor.
           </p>
           <Button variant="primary" onClick={handleAddNewItem}>
             Cadastrar Primeiro Item
@@ -199,6 +216,12 @@ export function MyItemsPage() {
           })}
         </div>
       )}
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
 
       {selectedItem && (
         <Modal

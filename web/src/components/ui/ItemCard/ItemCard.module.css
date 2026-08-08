@@ -65,6 +65,7 @@
 .statusUsed     { background-color: rgba(245, 158, 11, 0.9); }
 .statusReserved { background-color: rgba(59, 130, 246, 0.9); }
 .statusDonated  { background-color: rgba(100, 116, 139, 0.9); }
+.statusDonation { background-color: rgba(20, 184, 166, 0.9); }
 .statusSelled   { background-color: rgba(139, 92, 246, 0.9); }
 
 /* ─── Content ─────────────────────────────────────────────────── */
