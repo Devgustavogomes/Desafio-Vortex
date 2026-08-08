@@ -5,9 +5,9 @@ export const AboutSection = () => {
     <section className={styles.aboutSection} id="sobre">
       <div className={styles.container}>
         <div className={styles.content}>
-          <h2 className={styles.title}>Como funciona o <span className={styles.highlight}>UNIFOR Circular</span></h2>
+          <h2 className={styles.title}>Como funciona o <span className={styles.highlight}>Unifor Connect</span></h2>
           <p className={styles.description}>
-            O UNIFOR Circular é uma iniciativa criada por e para alunos da Universidade de Fortaleza. 
+            O Unifor Connect é uma iniciativa criada por e para alunos da Universidade de Fortaleza. 
             Nosso objetivo é promover a sustentabilidade dentro do campus facilitando a doação, troca e venda de materiais acadêmicos que você não usa mais.
           </p>
           

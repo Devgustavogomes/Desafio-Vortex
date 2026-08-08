@@ -12,7 +12,7 @@ export const HeroSection = () => {
           Reinvente o ciclo de vida dos seus <span className={styles.highlight}>materiais acadêmicos</span>
         </h1>
         <p className={styles.subtitle}>
-          Economia circular na UNIFOR. Doe, troque ou compre livros e equipamentos de outros estudantes. Menos desperdício, mais economia.
+          Economia circular na Unifor. Doe, troque ou compre livros e equipamentos de outros estudantes. Menos desperdício, mais economia.
         </p>
         <div className={styles.ctaGroup}>
           <Button variant="primary" onClick={() => navigate('/feed')}>Descubra Itens</Button>
