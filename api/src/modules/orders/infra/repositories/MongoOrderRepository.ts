@@ -3,6 +3,7 @@ import { Order } from "../../domain/entities/Order";
 import { Price } from "@/shared/domain/valueObjects/Price";
 import { OrderType, OrderStatus } from "../../domain/enums";
 import { OrderModel, IOrderDocument } from "../models/OrderModel";
+import { PaginationOptions, PaginatedResult } from "@/shared/domain/types/PaginatedResult";
 
 export class MongoOrderRepository implements IOrderRepository {
   private toDomain(doc: IOrderDocument): Order {
@@ -47,14 +48,42 @@ export class MongoOrderRepository implements IOrderRepository {
     return doc ? this.toDomain(doc) : null;
   }
 
-  async findByBuyerId(buyerId: string): Promise<Order[]> {
-    const docs = await OrderModel.find({ buyerId });
-    return docs.map((doc) => this.toDomain(doc));
+  async findByBuyerIdPaginated(
+    buyerId: string,
+    pagination: PaginationOptions,
+  ): Promise<PaginatedResult<Order>> {
+    const query = { buyerId };
+    const { page, limit } = pagination;
+    const skip = (page - 1) * limit;
+
+    const [docs, total] = await Promise.all([
+      OrderModel.find(query).sort({ _id: -1 }).skip(skip).limit(limit),
+      OrderModel.countDocuments(query),
+    ]);
+
+    return {
+      data: docs.map((doc) => this.toDomain(doc)),
+      meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    };
   }
 
-  async findBySellerId(sellerId: string): Promise<Order[]> {
-    const docs = await OrderModel.find({ sellerId });
-    return docs.map((doc) => this.toDomain(doc));
+  async findBySellerIdPaginated(
+    sellerId: string,
+    pagination: PaginationOptions,
+  ): Promise<PaginatedResult<Order>> {
+    const query = { sellerId };
+    const { page, limit } = pagination;
+    const skip = (page - 1) * limit;
+
+    const [docs, total] = await Promise.all([
+      OrderModel.find(query).sort({ _id: -1 }).skip(skip).limit(limit),
+      OrderModel.countDocuments(query),
+    ]);
+
+    return {
+      data: docs.map((doc) => this.toDomain(doc)),
+      meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    };
   }
 
   async update(id: string, order: Order): Promise<Order | null> {

@@ -80,8 +80,11 @@ export function OrderCard({ order, context, onAccept, onReject }: OrderCardProps
 
   const typeLabel = order.type === 'sale' ? 'Venda' : 'Doação';
   const statusConfig = getStatusConfig(order.status);
-  
   const showActions = context === 'selling' && order.status === 'waiting';
+
+  const counterpartName = context === 'selling' ? order.buyerName : order.sellerName;
+  const counterpartEmail = context === 'selling' ? order.buyerEmail : order.sellerEmail;
+  const counterpartLabel = context === 'selling' ? 'Solicitado por' : 'Vendido por';
 
   return (
     <div className={`${styles.card} glass`}>
@@ -97,20 +100,31 @@ export function OrderCard({ order, context, onAccept, onReject }: OrderCardProps
         {order.type === 'sale' && (
           <p className={styles.price}>{formatPrice(order.price)}</p>
         )}
+        {(counterpartName || counterpartEmail) && (
+          <div className={styles.userInfo}>
+            <span className={styles.userInfoLabel}>{counterpartLabel}:</span>
+            {counterpartName && (
+              <span className={styles.userName}>{counterpartName}</span>
+            )}
+            {counterpartEmail && (
+              <span className={styles.userEmail}>{counterpartEmail}</span>
+            )}
+          </div>
+        )}
       </div>
 
       {showActions && (
         <div className={styles.actions}>
-          <Button 
-            variant="primary" 
+          <Button
+            variant="primary"
             className={styles.acceptButton}
             onClick={handleAccept}
             disabled={!!actionLoading}
           >
             {actionLoading === 'accept' ? 'Processando...' : 'Aceitar'}
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className={styles.rejectButton}
             onClick={handleReject}
             disabled={!!actionLoading}
