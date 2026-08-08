@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icon.png'],
       manifest: {
-        name: 'UNIFOR Circular Marketplace',
-        short_name: 'UNIFOR Circular',
+        name: 'Unifor Connect',
+        short_name: 'Unifor Connect',
         description: 'Marketplace de Economia Circular do Campus da UNIFOR para doação e venda de materiais estudantis e acadêmicos',
         theme_color: '#047857',
         background_color: '#F8FAFC',

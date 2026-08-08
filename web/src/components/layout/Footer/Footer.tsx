@@ -5,8 +5,8 @@ export function Footer() {
     <footer className={styles.footer}>
       <div className={styles.content}>
         <div className={styles.brand}>
-          <img src="/icon.png" alt="UNIFOR Circular Logo" className={styles.logo} />
-          <span>UNIFOR Circular</span>
+          <img src="/icon.png" alt="Unifor Connect Logo" className={styles.logo} />
+          <span>Unifor Connect</span>
         </div>
         <div className={styles.links}>
           <a href="#about">Sobre o Projeto</a>
@@ -15,7 +15,7 @@ export function Footer() {
         </div>
       </div>
       <div className={styles.copyright}>
-        <p>&copy; {new Date().getFullYear()} UNIFOR Circular. Todos os direitos reservados.</p>
+        <p>&copy; {new Date().getFullYear()} Unifor Connect. Todos os direitos reservados.</p>
       </div>
     </footer>
   );
