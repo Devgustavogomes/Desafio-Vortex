@@ -47,34 +47,17 @@ export const ShowcaseSection = () => {
     setError(null);
 
     const category = categoryFilter !== 'all' ? (categoryFilter as ItemCategory) : undefined;
-    const cacheKey = `showcase-items-${categoryFilter}`;
 
     getAllItems(category, 1, 8)
       .then((result) => {
         if (isMounted) {
           setItems(result.data ?? []);
           setIsLoading(false);
-          try {
-            localStorage.setItem(cacheKey, JSON.stringify(result.data));
-          } catch {
-            /* localStorage cheio, ignora */
-          }
         }
       })
       .catch((err) => {
         console.error(err);
         if (isMounted) {
-          const cached = localStorage.getItem(cacheKey);
-          if (cached) {
-            try {
-              const parsed = JSON.parse(cached);
-              setItems(Array.isArray(parsed) ? parsed : []);
-              setIsLoading(false);
-              return;
-            } catch {
-              /* cache corrompido, segue pro erro */
-            }
-          }
           setError('Não foi possível carregar os itens no momento.');
           setIsLoading(false);
         }
@@ -84,6 +67,7 @@ export const ShowcaseSection = () => {
       isMounted = false;
     };
   }, [categoryFilter]);
+
 
   const handleDetailsClick = async (id: string) => {
     try {
