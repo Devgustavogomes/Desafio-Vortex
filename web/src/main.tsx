@@ -6,7 +6,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import './index.css'
 import App from './App.tsx'
 
-// Registrar Service Worker para habilitar funcionalidades PWA e Offline
+
 registerSW({
   onNeedRefresh() {
     console.log('Nova atualização disponível!')

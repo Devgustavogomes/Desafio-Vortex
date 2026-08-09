@@ -21,8 +21,8 @@ export function Header() {
   return (
     <header className={`${styles.header} glass`}>
       <Link to="/" className={styles.logoContainer} onClick={closeMenu}>
-        <img src="/icon.png" alt="UNIFOR Circular" className={styles.logo} />
-        <h1>UNIFOR Circular</h1>
+        <img src="/icon.png" alt="Unifor Connect" className={styles.logo} />
+        <h1>Unifor Connect</h1>
       </Link>
       
       <button 

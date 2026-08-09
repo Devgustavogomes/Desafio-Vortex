@@ -19,7 +19,7 @@ const makeItem = (overrides?: Partial<Parameters<typeof Item.create>[0]>) =>
   });
 
 describe("Item", () => {
-  // ─── create ───────────────────────────────────────────────────────────────
+  
 
   describe("create()", () => {
     it("gera um id automaticamente (não vazio)", () => {
@@ -64,7 +64,7 @@ describe("Item", () => {
     });
   });
 
-  // ─── restore ──────────────────────────────────────────────────────────────
+  
 
   describe("restore()", () => {
     it("reconstitui o item com todos os campos fornecidos", () => {
@@ -107,7 +107,7 @@ describe("Item", () => {
     });
   });
 
-  // ─── Setters ──────────────────────────────────────────────────────────────
+  
 
   describe("setters", () => {
     it("atualiza o name", () => {
@@ -135,7 +135,7 @@ describe("Item", () => {
     });
   });
 
-  // ─── reserve() ────────────────────────────────────────────────────────────
+  
 
   describe("reserve()", () => {
     it("muda status de available para reserved", () => {
@@ -166,7 +166,7 @@ describe("Item", () => {
     });
   });
 
-  // ─── sell() ───────────────────────────────────────────────────────────────
+  
 
   describe("sell()", () => {
     it("muda status de reserved para selled", () => {
@@ -189,7 +189,7 @@ describe("Item", () => {
     });
   });
 
-  // ─── markAsAvailable() ────────────────────────────────────────────────────
+  
 
   describe("markAsAvailable()", () => {
     it("muda status de reserved para available", () => {

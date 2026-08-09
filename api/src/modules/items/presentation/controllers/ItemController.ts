@@ -44,21 +44,28 @@ export class ItemController {
     const filters: ItemFilters = {};
 
     if (req.query.category) {
-      const raw = req.query.category as string;
-      filters.categories = raw
-        .split(",")
-        .map((c) => c.trim() as ItemCategory)
-        .filter(Boolean);
+      filters.category = req.query.category as ItemCategory;
     }
 
-    const items = await this.listAllItemsUseCase.execute(filters);
-    res.status(200).json(items.map((item) => this.toResponse(item)));
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 12;
+
+    const result = await this.listAllItemsUseCase.execute(filters, { page, limit });
+    res.status(200).json({
+      data: result.data.map((item) => this.toResponse(item)),
+      meta: result.meta,
+    });
   };
 
   listUserItems = async (req: Request, res: Response): Promise<void> => {
     const userId = req.userId!;
-    const items = await this.listUserItemsUseCase.execute(userId);
-    res.status(200).json(items.map((item) => this.toResponse(item)));
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 12;
+    const result = await this.listUserItemsUseCase.execute(userId, { page, limit });
+    res.status(200).json({
+      data: result.data.map((item) => this.toResponse(item)),
+      meta: result.meta,
+    });
   };
 
   getById = async (req: Request, res: Response): Promise<void> => {

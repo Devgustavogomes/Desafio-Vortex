@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../hooks/useAuth';
 import styles from './LoginPage.module.css';
 
-// ─── Tipos auxiliares ─────────────────────────────────────────────────────────
+
 
 interface ApiError {
   response?: {
@@ -14,7 +14,7 @@ interface ApiError {
   };
 }
 
-// ─── Ícones SVG inline ────────────────────────────────────────────────────────
+
 
 const LeafIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
@@ -42,7 +42,7 @@ const AlertIcon = () => (
   </svg>
 );
 
-// ─── Componente ───────────────────────────────────────────────────────────────
+
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -53,13 +53,13 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ── Handler de submit ───────────────────────────────────────────────────────
+  
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
 
-    // Validação frontend
+    
     if (!email.trim() || !password.trim()) {
       setError('Preencha todos os campos para continuar.');
       return;
@@ -81,23 +81,23 @@ export function LoginPage() {
     }
   }
 
-  // ── Render ──────────────────────────────────────────────────────────────────
+  
 
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.card}>
-        {/* Logo / Ícone decorativo */}
+        {}
         <div className={styles.logoWrapper}>
           <div className={styles.logoIcon}>
             <LeafIcon />
           </div>
         </div>
 
-        {/* Título */}
+        {}
         <h1 className={styles.title}>Entrar</h1>
         <p className={styles.subtitle}>Bem-vindo de volta à plataforma</p>
 
-        {/* Mensagem de erro da API */}
+        {}
         {error && (
           <div className={styles.errorMessage} role="alert">
             <AlertIcon />
@@ -105,9 +105,9 @@ export function LoginPage() {
           </div>
         )}
 
-        {/* Formulário */}
+        {}
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
-          {/* Campo: E-mail */}
+          {}
           <div className={styles.inputGroup}>
             <label htmlFor="login-email" className={styles.label}>
               E-mail
@@ -128,7 +128,7 @@ export function LoginPage() {
             </div>
           </div>
 
-          {/* Campo: Senha */}
+          {}
           <div className={styles.inputGroup}>
             <label htmlFor="login-password" className={styles.label}>
               Senha
@@ -149,7 +149,7 @@ export function LoginPage() {
             </div>
           </div>
 
-          {/* Botão submit */}
+          {}
           <button
             type="submit"
             className={styles.submitButton}
@@ -167,7 +167,7 @@ export function LoginPage() {
           </button>
         </form>
 
-        {/* Link para registro */}
+        {}
         <p className={styles.registerLink}>
           Não tem conta?{' '}
           <Link to="/register">Cadastre-se</Link>

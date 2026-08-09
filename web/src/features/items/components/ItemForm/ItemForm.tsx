@@ -10,7 +10,7 @@ import {
 import styles from "./ItemForm.module.css";
 import { useEffect } from "react";
 
-// Matches backend validation (ItemDTOs.ts)
+
 const itemFormSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório"),
   description: z.string().min(1, "A descrição é obrigatória"),
@@ -60,7 +60,7 @@ export function ItemForm({
     },
   });
 
-  // Update values when initialData changes (async fetch in edit page)
+  
   useEffect(() => {
     if (initialData) {
       reset({
@@ -82,7 +82,7 @@ export function ItemForm({
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
-      {/* ─── Basic Info ─────────────────────────────────── */}
+      {}
       <p className={styles.sectionLabel}>Informações básicas</p>
 
       <div className={styles.formGroup}>
@@ -122,7 +122,7 @@ export function ItemForm({
         )}
       </div>
 
-      {/* ─── Pricing & Image ────────────────────────────── */}
+      {}
       <p className={styles.sectionLabel}>Preço e imagem</p>
 
       <div className={styles.row}>
@@ -177,7 +177,7 @@ export function ItemForm({
         </div>
       </div>
 
-      {/* ─── Type & Condition ───────────────────────────── */}
+      {}
       <p className={styles.sectionLabel}>Classificação</p>
 
       <div className={styles.row}>
@@ -249,7 +249,7 @@ export function ItemForm({
         )}
       </div>
 
-      {/* ─── Status (edit only) ─────────────────────────── */}
+      {}
       {isEdit && (
         <div className={styles.statusSection}>
           <span className={styles.statusBadge}>✏ Modo edição</span>

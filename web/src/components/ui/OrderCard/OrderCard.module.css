@@ -40,7 +40,7 @@
 
 .statusWaiting {
   background-color: rgba(245, 158, 11, 0.1);
-  color: #D97706; /* Amber 600 */
+  color: #D97706; 
 }
 
 .statusAccepted {
@@ -74,6 +74,36 @@
   margin: 0;
 }
 
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background-color: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-md);
+  border-left: 2px solid var(--color-primary);
+}
+
+.userInfoLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.userName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.userEmail {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
 .actions {
   display: flex;
   gap: var(--space-3);
@@ -82,7 +112,7 @@
 
 .acceptButton, .rejectButton {
   flex: 1;
-  min-height: 44px; /* Touch target minimum */
+  min-height: 44px; 
 }
 
 .acceptButton {
@@ -90,7 +120,7 @@
 }
 
 .acceptButton:hover {
-  background-color: #059669; /* Emerald 600 */
+  background-color: #059669; 
 }
 
 .rejectButton {
@@ -114,7 +144,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-2);
-    order: 2; /* Put badge on the right side if needed, or keep order */
+    order: 2; 
   }
 
   .content {
@@ -135,3 +165,4 @@
     padding: 0.5rem 1rem;
   }
 }
+

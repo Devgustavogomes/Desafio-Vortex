@@ -11,11 +11,11 @@ import type {
   AuthContextType,
 } from "../types/auth.types";
 
-// ─── Context ─────────────────────────────────────────────────────────────────
+
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-// ─── Provider ────────────────────────────────────────────────────────────────
+
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const isAuthenticated = user !== null;
 
-  // Restaurar sessão a partir do localStorage no mount
+  
   useEffect(() => {
     async function restoreSession() {
       const token = storage.getAccessToken();
@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const profile = await userService.getProfile();
           setUser(profile);
         } catch {
-          // Token inválido ou expirado → limpar estado
+          
           storage.clearAccessToken();
         }
       }

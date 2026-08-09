@@ -1,5 +1,6 @@
 import { MongoOrderRepository } from "./infra/repositories/MongoOrderRepository";
 import { MongoItemRepository } from "../items/infra/repositories/MongoItemRepository";
+import { MongoUserRepository } from "../user/infra/repositories/MongoUserRepository";
 import { CreateOrderUseCase } from "./application/useCases/CreateOrderUseCase";
 import { ListOrdersUseCase } from "./application/useCases/ListOrdersUseCase";
 import { GetOrderByIdUseCase } from "./application/useCases/GetOrderByIdUseCase";
@@ -10,6 +11,7 @@ import { createOrderRouter } from "./presentation/routes/orderRoutes";
 
 const orderRepository = new MongoOrderRepository();
 const itemRepository = new MongoItemRepository();
+const userRepository = new MongoUserRepository();
 
 const createOrderUseCase = new CreateOrderUseCase(orderRepository, itemRepository);
 const listOrdersUseCase = new ListOrdersUseCase(orderRepository);
@@ -23,6 +25,8 @@ const orderController = new OrderController(
   getOrderByIdUseCase,
   acceptOrderUseCase,
   rejectOrderUseCase,
+  userRepository,
 );
 
 export const orderRouter = createOrderRouter(orderController);
+

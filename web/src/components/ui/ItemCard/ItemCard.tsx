@@ -1,7 +1,7 @@
 import styles from './ItemCard.module.css';
 import { Button } from '../Button/Button';
 
-export type ItemStatus = 'Novo' | 'Usado' | 'Doado' | 'Reservado' | 'Vendido';
+export type ItemStatus = 'Novo' | 'Usado' | 'Doação' | 'Doado' | 'Reservado' | 'Vendido';
 
 interface ItemCardProps {
   title: string;
@@ -36,6 +36,7 @@ export function ItemCard({
     switch (status) {
       case 'Novo': return styles.statusNew;
       case 'Usado': return styles.statusUsed;
+      case 'Doação': return styles.statusDonation;
       case 'Doado': return styles.statusDonated;
       case 'Reservado': return styles.statusReserved;
       case 'Vendido': return styles.statusSelled;

@@ -14,11 +14,11 @@
   box-shadow: var(--shadow-md);
 }
 
-/* ─── Image ───────────────────────────────────────────────────── */
+
 .imageContainer {
   position: relative;
   width: 100%;
-  padding-top: 60%; /* less tall on single-col mobile */
+  padding-top: 60%; 
   border-radius: 8px;
   overflow: hidden;
   background-color: var(--color-border);
@@ -47,7 +47,7 @@
   background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
 }
 
-/* ─── Status badge ────────────────────────────────────────────── */
+
 .statusBadge {
   position: absolute;
   top: 0.5rem;
@@ -65,9 +65,10 @@
 .statusUsed     { background-color: rgba(245, 158, 11, 0.9); }
 .statusReserved { background-color: rgba(59, 130, 246, 0.9); }
 .statusDonated  { background-color: rgba(100, 116, 139, 0.9); }
+.statusDonation { background-color: rgba(20, 184, 166, 0.9); }
 .statusSelled   { background-color: rgba(139, 92, 246, 0.9); }
 
-/* ─── Content ─────────────────────────────────────────────────── */
+
 .content {
   display: flex;
   flex-direction: column;
@@ -113,7 +114,7 @@
   overflow: hidden;
 }
 
-/* ─── Actions ─────────────────────────────────────────────────── */
+
 .actionButton {
   width: 100%;
 }
@@ -139,9 +140,9 @@
   color: #dc2626;
 }
 
-/* ─── Mobile (max 640px) ──────────────────────────────────────── */
+
 @media (max-width: 640px) {
-  /* On single-column, show card as a horizontal row */
+  
   .card {
     flex-direction: row;
     align-items: flex-start;
@@ -161,13 +162,13 @@
 
   .content {
     flex: 1;
-    min-width: 0; /* prevent overflow */
+    min-width: 0; 
   }
 
   .title {
     font-size: 0.9375rem;
     margin-bottom: 0.625rem;
-    /* clamp long titles on mobile */
+    
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;

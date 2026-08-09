@@ -9,6 +9,7 @@ import {
   ItemStatus,
   ItemCategory,
 } from "../types/items.types";
+import { type PaginatedResponse } from "../types/pagination.types";
 
 export interface ShowcaseItem {
   id: string;
@@ -19,24 +20,28 @@ export interface ShowcaseItem {
 }
 
 export async function fetchShowcaseItems(
-  categories?: ItemCategory[],
+  category?: ItemCategory,
 ): Promise<ShowcaseItem[]> {
   try {
     const params: Record<string, string> = {};
-    if (categories && categories.length > 0) {
-      params.category = categories.join(",");
+    if (category) {
+      params.category = category;
     }
+    params.page = "1";
+    params.limit = "8";
 
-    const { data } = await api.get<Item[]>("/items", { params });
+    const { data } = await api.get<PaginatedResponse<Item>>("/items", { params });
 
-    return data.map((item) => {
+    return data.data.map((item) => {
       let mappedStatus: UIItemStatus;
       const mappedCategory = item.type === ItemType.DONATION ? "Doação" : "Venda";
 
-      if (item.status === ItemStatus.RESERVED) {
+      if (item.status === ItemStatus.SELLED) {
+        mappedStatus = item.type === ItemType.DONATION ? "Doado" : "Vendido";
+      } else if (item.status === ItemStatus.RESERVED) {
         mappedStatus = "Reservado";
       } else if (item.type === ItemType.DONATION) {
-        mappedStatus = "Doado";
+        mappedStatus = "Doação";
       } else {
         mappedStatus = item.condition === ItemCondition.NEW ? "Novo" : "Usado";
       }
@@ -55,17 +60,28 @@ export async function fetchShowcaseItems(
   }
 }
 
-export async function getAllItems(categories?: ItemCategory[]): Promise<Item[]> {
+export async function getAllItems(
+  category?: ItemCategory,
+  page: number = 1,
+  limit: number = 12,
+): Promise<PaginatedResponse<Item>> {
   const params: Record<string, string> = {};
-  if (categories && categories.length > 0) {
-    params.category = categories.join(",");
+  if (category) {
+    params.category = category;
   }
-  const { data } = await api.get<Item[]>("/items", { params });
+  params.page = String(page);
+  params.limit = String(limit);
+  const { data } = await api.get<PaginatedResponse<Item>>("/items", { params });
   return data;
 }
 
-export async function getUserItems(): Promise<Item[]> {
-  const { data } = await api.get<Item[]>("/items/me");
+export async function getUserItems(
+  page: number = 1,
+  limit: number = 12,
+): Promise<PaginatedResponse<Item>> {
+  const { data } = await api.get<PaginatedResponse<Item>>("/items/me", {
+    params: { page: String(page), limit: String(limit) },
+  });
   return data;
 }
 

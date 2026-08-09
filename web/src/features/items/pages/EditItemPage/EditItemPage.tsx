@@ -45,7 +45,7 @@ export function EditItemPage() {
         status: data.status,
         imageUrl: data.imageUrl,
       });
-      // Redirect to my items list upon success
+      
       navigate("/my-items", {
         state: { successMessage: "Item atualizado com sucesso! ✅" },
       });
