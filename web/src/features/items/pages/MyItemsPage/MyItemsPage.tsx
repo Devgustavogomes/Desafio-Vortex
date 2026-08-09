@@ -45,12 +45,11 @@ export function MyItemsPage() {
   };
   const [totalPages, setTotalPages] = useState(1);
 
-  
   useEffect(() => {
     const state = location.state as { successMessage?: string } | null;
     if (state?.successMessage) {
       setToastMessage(state.successMessage);
-      
+
       window.history.replaceState({}, document.title);
     }
   }, [location.state]);
@@ -60,8 +59,8 @@ export function MyItemsPage() {
       setIsLoading(true);
       setError(null);
       const result = await getUserItems(targetPage);
-      setItems(result.data ?? []);
-      setTotalPages(result.meta?.totalPages ?? 1);
+      setItems(result.data);
+      setTotalPages(result.meta.totalPages);
     } catch (err) {
       console.error("Erro ao buscar os itens do usuário:", err);
       setError(
@@ -74,7 +73,6 @@ export function MyItemsPage() {
 
   useEffect(() => {
     fetchItems(page);
-    
   }, [page]);
 
   const handleEdit = (id: string) => {

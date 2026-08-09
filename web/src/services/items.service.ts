@@ -30,11 +30,15 @@ export async function fetchShowcaseItems(
     params.page = "1";
     params.limit = "8";
 
-    const { data } = await api.get<PaginatedResponse<Item>>("/items", { params });
+    const { data } = await api.get<PaginatedResponse<Item> | Item[]>("/items", {
+      params,
+    });
+    const itemsList: Item[] = Array.isArray(data) ? data : (data?.data ?? []);
 
-    return data.data.map((item) => {
+    return itemsList.map((item) => {
       let mappedStatus: UIItemStatus;
-      const mappedCategory = item.type === ItemType.DONATION ? "Doação" : "Venda";
+      const mappedCategory =
+        item.type === ItemType.DONATION ? "Doação" : "Venda";
 
       if (item.status === ItemStatus.SELLED) {
         mappedStatus = item.type === ItemType.DONATION ? "Doado" : "Vendido";
@@ -71,7 +75,20 @@ export async function getAllItems(
   }
   params.page = String(page);
   params.limit = String(limit);
-  const { data } = await api.get<PaginatedResponse<Item>>("/items", { params });
+  const { data } = await api.get<PaginatedResponse<Item> | Item[]>("/items", { params });
+
+  if (Array.isArray(data)) {
+    return {
+      data,
+      meta: {
+        total: data.length,
+        page,
+        limit,
+        totalPages: Math.ceil(data.length / limit) || 1,
+      },
+    };
+  }
+
   return data;
 }
 
@@ -79,9 +96,22 @@ export async function getUserItems(
   page: number = 1,
   limit: number = 12,
 ): Promise<PaginatedResponse<Item>> {
-  const { data } = await api.get<PaginatedResponse<Item>>("/items/me", {
+  const { data } = await api.get<PaginatedResponse<Item> | Item[]>("/items/me", {
     params: { page: String(page), limit: String(limit) },
   });
+
+  if (Array.isArray(data)) {
+    return {
+      data,
+      meta: {
+        total: data.length,
+        page,
+        limit,
+        totalPages: Math.ceil(data.length / limit) || 1,
+      },
+    };
+  }
+
   return data;
 }
 
@@ -97,7 +127,7 @@ export async function createItem(itemData: CreateItemInput): Promise<Item> {
 
 export async function updateItem(
   id: string,
-  itemData: UpdateItemInput
+  itemData: UpdateItemInput,
 ): Promise<Item> {
   const { data } = await api.put<Item>(`/items/${id}`, itemData);
   return data;
