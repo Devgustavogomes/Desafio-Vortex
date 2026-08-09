@@ -35,7 +35,12 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
           {
-            urlPattern: /\/api\/.*/i,
+            urlPattern: ({ url }: { url: URL }) =>
+              url.pathname.includes('/items') ||
+              url.pathname.includes('/orders') ||
+              url.pathname.includes('/users') ||
+              url.pathname.includes('/auth') ||
+              url.pathname.includes('/api'),
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',

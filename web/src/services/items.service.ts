@@ -75,6 +75,7 @@ export async function getAllItems(
   }
   params.page = String(page);
   params.limit = String(limit);
+
   const { data } = await api.get<PaginatedResponse<Item> | Item[]>("/items", { params });
 
   if (Array.isArray(data)) {
