@@ -61,6 +61,7 @@ export function FeedPage() {
   const [categoryFilter, setCategoryFilter] = useState<FilterCategory>("all");
 
   const fetchItems = async (targetPage = page) => {
+    const cacheKey = `feed-items-${categoryFilter}-page${targetPage}`;
     try {
       setIsLoading(true);
       setError(null);
@@ -69,11 +70,31 @@ export function FeedPage() {
       setItems(result.data);
       setTotalPages(result.meta.totalPages);
       setTotalItems(result.meta.total);
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify(result));
+      } catch {
+        /* localStorage cheio, ignora */
+      }
     } catch (err) {
       console.error("Erro ao buscar os itens do feed:", err);
-      setError(
-        "Ocorreu um erro ao carregar os itens disponíveis. Tente novamente mais tarde.",
-      );
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        try {
+          const result = JSON.parse(cached);
+          setItems(result.data);
+          setTotalPages(result.meta.totalPages);
+          setTotalItems(result.meta.total);
+          setError(null);
+        } catch {
+          setError(
+            "Ocorreu um erro ao carregar os itens disponíveis. Tente novamente mais tarde.",
+          );
+        }
+      } else {
+        setError(
+          "Ocorreu um erro ao carregar os itens disponíveis. Tente novamente mais tarde.",
+        );
+      }
     } finally {
       setIsLoading(false);
     }
