@@ -106,6 +106,7 @@
 
 .actions {
   display: flex;
+  flex-direction: column;
   gap: var(--space-3);
   margin-top: var(--space-2);
 }
