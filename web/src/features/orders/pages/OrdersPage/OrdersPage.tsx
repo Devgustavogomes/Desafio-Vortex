@@ -114,7 +114,7 @@ export function OrdersPage() {
           <p>{error}</p>
           <Button
             variant="primary"
-            onClick={fetchOrders}
+            onClick={() => fetchOrders()}
             style={{ marginTop: '1rem' }}
           >
             Tentar novamente
