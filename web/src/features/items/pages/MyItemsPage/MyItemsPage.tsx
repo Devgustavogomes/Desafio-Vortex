@@ -60,8 +60,8 @@ export function MyItemsPage() {
       setIsLoading(true);
       setError(null);
       const result = await getUserItems(targetPage);
-      setItems(result.data);
-      setTotalPages(result.meta.totalPages);
+      setItems(result.data ?? []);
+      setTotalPages(result.meta?.totalPages ?? 1);
     } catch (err) {
       console.error("Erro ao buscar os itens do usuário:", err);
       setError(

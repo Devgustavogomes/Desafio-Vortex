@@ -38,8 +38,8 @@ export function OrdersPage() {
     setError(null);
     try {
       const result = await ordersService.getOrders(activeTab, targetPage);
-      setOrders(result.data);
-      setTotalPages(result.meta.totalPages);
+      setOrders(result.data ?? []);
+      setTotalPages(result.meta?.totalPages ?? 1);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao carregar os pedidos. Tente novamente mais tarde.');
       setToast({ message: 'Erro ao carregar pedidos', variant: 'error' });
@@ -57,8 +57,8 @@ export function OrdersPage() {
       try {
         const result = await ordersService.getOrders(activeTab, page);
         if (mounted) {
-          setOrders(result.data);
-          setTotalPages(result.meta.totalPages);
+          setOrders(result.data ?? []);
+          setTotalPages(result.meta?.totalPages ?? 1);
         }
       } catch (err: any) {
         if (mounted) {

@@ -68,8 +68,8 @@ export function FeedPage() {
       const category = categoryFilter !== "all" ? (categoryFilter as ItemCategory) : undefined;
       const result = await getAllItems(category, targetPage);
       setItems(result.data ?? []);
-      setTotalPages(result.meta.totalPages);
-      setTotalItems(result.meta.total);
+      setTotalPages(result.meta?.totalPages ?? 1);
+      setTotalItems(result.meta?.total ?? 0);
       try {
         localStorage.setItem(cacheKey, JSON.stringify(result));
       } catch {
@@ -82,8 +82,8 @@ export function FeedPage() {
         try {
           const result = JSON.parse(cached);
           setItems(result.data ?? []);
-          setTotalPages(result.meta.totalPages);
-          setTotalItems(result.meta.total);
+          setTotalPages(result.meta?.totalPages ?? 1);
+          setTotalItems(result.meta?.total ?? 0);
           setError(null);
         } catch {
           setError(
