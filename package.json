@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "setup:env": "node -e \"const fs=require('fs'); ['api', 'web'].forEach(d => { if(fs.existsSync(`${d}/.env.example`) && !fs.existsSync(`${d}/.env`)) { fs.copyFileSync(`${d}/.env.example`, `${d}/.env`); console.log(`Criado ${d}/.env`); } })\"",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "docker:build": "docker compose build",
