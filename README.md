@@ -190,6 +190,6 @@ Embora a IA tenha acelerado muito o desenvolvimento, a revisão crítica e a int
    - **O Problema:** A IA estava gerando código utilizando padrões do Express 4. Em todos os _controllers_, ela envolvia o código da rota em um bloco `try/catch` e chamava `next(error)` para direcionar as exceções ao middleware de _error handling_.
    - **A Intervenção:** Como nossa stack utiliza o **Express 5**, esse _boilerplate_ não é mais necessário. O Express 5 lida nativamente com promessas rejeitadas em rotas assíncronas. Tive que intervir, instruindo e corrigindo o código para remover os blocos `try/catch` desnecessários.
 
-2. **Lógica de Cache Desnecessária no Web Service:**
-   - **O Problema:** Ao criar o _web service_, a IA incluiu arbitrariamente uma camada de cache utilizando o `localStorage` do navegador. Isso gerou um comportamento indesejado, pois a aplicação começou a exibir dados desatualizados na tela.
-   - **A Intervenção:** O cache manual não tinha necessidade, visto que a própria infraestrutura do _web service_ / biblioteca de requisições já cuida do gerenciamento de cache e estado adequadamente. Tive que remover o código do `localStorage` para restaurar o comportamento dinâmico e correto da aplicação.
+2. **Lógica de Cache Desnecessária no Service Worker:**
+   - **O Problema:** Ao criar o _service worker_, a IA incluiu arbitrariamente uma camada de cache utilizando o `localStorage` do navegador. Isso gerou um comportamento indesejado, pois a aplicação começou a exibir dados desatualizados na tela.
+   - **A Intervenção:** O cache manual não tinha necessidade, visto que a própria infraestrutura do _service worker_ e das bibliotecas de requisição já cuidam do gerenciamento de cache e estado adequadamente. Tive que remover o código do `localStorage` para restaurar o comportamento dinâmico e correto da aplicação.
