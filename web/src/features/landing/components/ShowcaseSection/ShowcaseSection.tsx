@@ -52,7 +52,7 @@ export const ShowcaseSection = () => {
     getAllItems(category, 1, 8)
       .then((result) => {
         if (isMounted) {
-          setItems(result.data);
+          setItems(result.data ?? []);
           setIsLoading(false);
           try {
             localStorage.setItem(cacheKey, JSON.stringify(result.data));
@@ -67,7 +67,8 @@ export const ShowcaseSection = () => {
           const cached = localStorage.getItem(cacheKey);
           if (cached) {
             try {
-              setItems(JSON.parse(cached));
+              const parsed = JSON.parse(cached);
+              setItems(Array.isArray(parsed) ? parsed : []);
               setIsLoading(false);
               return;
             } catch {

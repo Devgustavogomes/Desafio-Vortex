@@ -67,7 +67,7 @@ export function FeedPage() {
       setError(null);
       const category = categoryFilter !== "all" ? (categoryFilter as ItemCategory) : undefined;
       const result = await getAllItems(category, targetPage);
-      setItems(result.data);
+      setItems(result.data ?? []);
       setTotalPages(result.meta.totalPages);
       setTotalItems(result.meta.total);
       try {
@@ -81,7 +81,7 @@ export function FeedPage() {
       if (cached) {
         try {
           const result = JSON.parse(cached);
-          setItems(result.data);
+          setItems(result.data ?? []);
           setTotalPages(result.meta.totalPages);
           setTotalItems(result.meta.total);
           setError(null);
